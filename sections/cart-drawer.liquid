@@ -1,0 +1,103 @@
+<div id="cart-drawer-overlay" class="cdrawer-overlay"></div>
+
+<div id="cart-drawer" class="cdrawer" role="dialog" aria-modal="true" aria-label="Sacola">
+
+  <div class="cdrawer-head">
+    <div class="cdrawer-title">
+      Sacola
+      {%- if cart.item_count > 0 -%}
+        <span class="cdrawer-badge">{{ cart.item_count }}</span>
+      {%- endif -%}
+    </div>
+    <button class="cdrawer-close" aria-label="Fechar sacola">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  {%- if cart.item_count > 0 -%}
+    {%- assign free_threshold = settings.free_shipping_threshold | default: 199 -%}
+    {%- assign threshold_cents = free_threshold | times: 100 -%}
+    {%- assign missing_cents = threshold_cents | minus: cart.total_price -%}
+    {%- assign freight_pct = cart.total_price | times: 100.0 | divided_by: threshold_cents | at_most: 100 | round -%}
+
+    <div class="cdrawer-freight">
+      <div class="cdrawer-freight-txt{% if cart.total_price >= threshold_cents %} is-free{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3m0 0h3l3 6v4h-3"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+        {%- if cart.total_price >= threshold_cents -%}
+          Frete <b>GRÁTIS</b> desbloqueado! 🎉
+        {%- else -%}
+          Faltam <b>{{ missing_cents | money }}</b> para FRETE GRÁTIS
+        {%- endif -%}
+      </div>
+      <div class="cdrawer-track"><i style="width:{{ freight_pct }}%"></i></div>
+    </div>
+
+    <div class="cdrawer-items">
+      {%- for item in cart.items -%}
+        <div class="cdrawer-item" data-key="{{ item.key }}">
+          <a class="cdrawer-item-img" href="{{ item.url }}">
+            {{ item.image | image_url: width: 200 | image_tag: loading: 'lazy', alt: item.title }}
+          </a>
+          <div class="cdrawer-item-body">
+            <a class="cdrawer-item-name" href="{{ item.url }}">{{ item.product_title }}</a>
+            {%- unless item.variant.title == 'Default Title' -%}
+              <div class="cdrawer-item-vars">
+                {%- for opt in item.options_with_values -%}
+                  <span>{{ opt.value }}</span>
+                {%- endfor -%}
+              </div>
+            {%- endunless -%}
+            <div class="cdrawer-item-ctrl">
+              <div class="cdrawer-qty">
+                <button type="button" class="cdrawer-qty-btn" data-key="{{ item.key }}" data-delta="-1" aria-label="Diminuir">−</button>
+                <span>{{ item.quantity }}</span>
+                <button type="button" class="cdrawer-qty-btn" data-key="{{ item.key }}" data-delta="1" aria-label="Aumentar">+</button>
+              </div>
+              <button type="button" class="cdrawer-rm" data-key="{{ item.key }}" aria-label="Remover">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="cdrawer-item-price">
+            <b>{{ item.final_line_price | money }}</b>
+            {%- if item.original_line_price > item.final_line_price -%}
+              <s>{{ item.original_line_price | money }}</s>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <div class="cdrawer-foot">
+      <div class="cdrawer-subtotal">
+        <span>Subtotal</span>
+        <b>{{ cart.total_price | money }}</b>
+      </div>
+      <div class="cdrawer-pix">
+        No Pix: <b>{{ cart.total_price | times: 0.9 | money }}</b>
+        <span class="cpix-tag">10% off</span>
+      </div>
+      <a href="{{ routes.checkout }}" class="btn-solid cdrawer-cta">
+        Finalizar compra
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="{{ routes.cart_url }}" class="cdrawer-full-cart">Ver sacola completa</a>
+    </div>
+
+  {%- else -%}
+    <div class="cdrawer-empty">
+      <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.3" class="cdrawer-empty-ico">
+        <path d="M16 22h32l-3 30H19zM24 22v-5a8 8 0 0 1 16 0v5"/>
+      </svg>
+      <p>Sua sacola está vazia.</p>
+      <a href="{{ routes.collections_url }}" class="btn-solid">Explorar produtos</a>
+    </div>
+  {%- endif -%}
+
+</div>
+
+{% schema %}
+{
+  "name": "Carrinho Lateral"
+}
+{% endschema %}

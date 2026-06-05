@@ -13,16 +13,16 @@
     <a class="logo" href="{{ routes.root_url }}">{{ shop.name }}</a>
 
     <div class="nav-actions">
-      <button type="button" aria-label="{{ 'general.search' | t }}">
+      <button type="button" data-open-search aria-label="Buscar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
       </button>
       <a href="{{ routes.account_url }}" aria-label="{{ 'general.account' | t }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>
       </a>
-      <a href="{{ routes.cart_url }}" aria-label="{{ 'general.cart' | t }}" style="width:24px;height:24px;display:grid;place-items:center;color:#1a1a1a;position:relative;">
+      <button type="button" data-open-cart aria-label="Sacola" style="width:24px;height:24px;display:grid;place-items:center;color:#1a1a1a;position:relative;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:21px;height:21px;"><path d="M6 8h12l-1 12H7zM9 8V6a3 3 0 0 1 6 0v2"/></svg>
         <span class="cart-count">{{ cart.item_count }}</span>
-      </a>
+      </button>
     </div>
   </div>
 </header>
@@ -30,6 +30,18 @@
 {%- if section.settings.show_cashbar -%}
 <div class="cashbar">{{ section.settings.cashbar_text }}</div>
 {%- endif -%}
+
+<div class="search-panel" id="searchPanel" aria-hidden="true">
+  <form action="{{ routes.search_url }}" method="get" class="search-panel-form" role="search">
+    <input type="hidden" name="type" value="product">
+    <svg class="search-panel-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+    <input type="search" name="q" id="searchQ" class="search-panel-input" placeholder="Buscar produtos, coleções..." autocomplete="off" spellcheck="false">
+    <button type="button" class="search-panel-close iconbtn" id="searchClose" aria-label="Fechar busca">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </form>
+  <div class="search-suggestions" id="searchSuggestions"></div>
+</div>
 
 {% schema %}
 {

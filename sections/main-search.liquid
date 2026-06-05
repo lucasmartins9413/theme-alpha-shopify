@@ -1,0 +1,118 @@
+<div class="pagehero">
+  <div class="wrap">
+    {%- render 'breadcrumb' -%}
+    <h1>
+      {%- if search.performed and search.terms != blank -%}
+        Resultados para "{{ search.terms | escape }}"
+      {%- else -%}
+        Busca
+      {%- endif -%}
+    </h1>
+
+    <form action="{{ routes.search_url }}" method="get" class="search-page-form" role="search">
+      <input type="hidden" name="type" value="product">
+      <div class="spf-wrap">
+        <svg class="spf-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+        <input class="spf-input" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Buscar produtos, coleções..." autocomplete="off" spellcheck="false">
+        <button class="spf-btn btn-solid" type="submit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+          Buscar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{%- if search.performed -%}
+  <div class="wrap">
+
+    {%- if search.results_count > 0 -%}
+      <div class="search-meta">
+        {%- if search.results_count == 1 -%}
+          1 produto encontrado
+        {%- else -%}
+          {{ search.results_count }} produtos encontrados
+        {%- endif -%}
+      </div>
+
+      {%- paginate search.results by section.settings.results_per_page -%}
+        <div class="product-grid">
+          {%- for item in search.results -%}
+            {%- if item.object_type == 'product' -%}
+              {%- render 'product-card', product: item -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <div class="loadmore">
+            <p>Mostrando página <b>{{ paginate.current_page }}</b> de <b>{{ paginate.pages }}</b></p>
+            <div class="barwrap">
+              <i style="width:{{ paginate.current_page | times: 100 | divided_by: paginate.pages }}%"></i>
+            </div>
+            <div class="search-pagination">
+              {%- if paginate.previous -%}
+                <a href="{{ paginate.previous.url }}" class="btn-ghost">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>
+                  Anterior
+                </a>
+              {%- endif -%}
+              {%- if paginate.next -%}
+                <a href="{{ paginate.next.url }}" class="btn-ghost">
+                  Próximo
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endpaginate -%}
+
+    {%- else -%}
+      <div class="search-noresults">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="28" cy="28" r="18"/><path d="m42 42 12 12"/><path d="M22 28h12M28 22v12" opacity=".35"/></svg>
+        <h2>Nenhum resultado</h2>
+        <p>Não encontramos produtos para "<b>{{ search.terms | escape }}</b>".</p>
+        <div class="search-hints">
+          <p>Sugestões:</p>
+          <ul>
+            <li>Verifique a ortografia da sua busca</li>
+            <li>Use termos mais genéricos (ex: "camiseta" ao invés de "camiseta azul dry fit P")</li>
+            <li>Navegue pelas coleções abaixo</li>
+          </ul>
+        </div>
+        <a href="{{ routes.collections_url }}" class="btn-solid">Ver todas as coleções</a>
+      </div>
+    {%- endif -%}
+
+  </div>
+{%- else -%}
+  <div class="wrap">
+    <div class="search-empty-state">
+      <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" class="search-empty-ico">
+        <circle cx="28" cy="28" r="18"/><path d="m42 42 12 12"/>
+      </svg>
+      <p>Digite acima para buscar produtos.</p>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Resultados da Busca",
+  "settings": [
+    {
+      "type": "range",
+      "id": "results_per_page",
+      "label": "Resultados por página",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 24
+    }
+  ],
+  "presets": [
+    { "name": "Resultados da Busca" }
+  ]
+}
+{% endschema %}
