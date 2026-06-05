@@ -295,8 +295,8 @@
     "featured-products": {
       "type": "featured-products",
       "settings": {
-        "collection_handle": "",
-        "products_limit": 8,
+        "collection_handle": "frontpage",
+        "products_limit": 4,
         "see_all_url": ""
       }
     }
