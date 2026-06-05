@@ -9,7 +9,7 @@
   {%- assign discount_pct = card_product.compare_at_price | minus: card_product.price | times: 100 | divided_by: card_product.compare_at_price -%}
 {%- endif -%}
 
-<a class="pcard" href="{{ card_product.url }}" style="flex:0 0 200px;">
+<a class="pcard" href="{{ card_product.url }}">
   <div class="ph">
     {%- if show_badge -%}
       <span class="badge">
