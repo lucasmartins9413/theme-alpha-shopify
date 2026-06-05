@@ -1,0 +1,40 @@
+<nav class="crumb" aria-label="Breadcrumb">
+  <a href="{{ routes.root_url }}">Home</a>
+
+  {%- if template.name == 'collection' -%}
+    <span class="sep">/</span>
+    {%- if collection.metafields.custom.parent_collection != blank -%}
+      <a href="{{ collection.metafields.custom.parent_collection.value.url }}">
+        {{ collection.metafields.custom.parent_collection.value.title }}
+      </a>
+      <span class="sep">/</span>
+    {%- endif -%}
+    <b>{{ collection.title }}</b>
+
+  {%- elsif template.name == 'product' -%}
+    {%- if product.collections.first != blank -%}
+      <span class="sep">/</span>
+      <a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a>
+    {%- endif -%}
+    <span class="sep">/</span>
+    <b>{{ product.title | truncate: 40 }}</b>
+
+  {%- elsif template.name == 'cart' -%}
+    <span class="sep">/</span>
+    <b>Minha Sacola</b>
+
+  {%- elsif template.name == 'page' -%}
+    <span class="sep">/</span>
+    <b>{{ page.title }}</b>
+
+  {%- elsif template.name == 'blog' -%}
+    <span class="sep">/</span>
+    <b>{{ blog.title }}</b>
+
+  {%- elsif template.name == 'article' -%}
+    <span class="sep">/</span>
+    <a href="{{ blog.url }}">{{ blog.title }}</a>
+    <span class="sep">/</span>
+    <b>{{ article.title | truncate: 40 }}</b>
+  {%- endif -%}
+</nav>

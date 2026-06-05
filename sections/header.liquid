@@ -1,0 +1,70 @@
+<header class="nav">
+  <div class="nav-inner">
+    <nav class="nav-links">
+      {%- for link in linklists[section.settings.menu].links -%}
+        <a href="{{ link.url }}"
+           {% if link.title == section.settings.accent_label %}class="accent"{% endif %}
+           {% if link.title == section.settings.plain_label %}class="plain"{% endif %}>
+          {{ link.title }}
+        </a>
+      {%- endfor -%}
+    </nav>
+
+    <a class="logo" href="{{ routes.root_url }}">{{ shop.name }}</a>
+
+    <div class="nav-actions">
+      <button type="button" aria-label="{{ 'general.search' | t }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+      </button>
+      <a href="{{ routes.account_url }}" aria-label="{{ 'general.account' | t }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>
+      </a>
+      <a href="{{ routes.cart_url }}" aria-label="{{ 'general.cart' | t }}" style="width:24px;height:24px;display:grid;place-items:center;color:#1a1a1a;position:relative;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:21px;height:21px;"><path d="M6 8h12l-1 12H7zM9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span class="cart-count">{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+{%- if section.settings.show_cashbar -%}
+<div class="cashbar">{{ section.settings.cashbar_text }}</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Cabeçalho",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu principal",
+      "default": "main-menu"
+    },
+    {
+      "type": "text",
+      "id": "accent_label",
+      "label": "Link destaque (verde)",
+      "default": "Copa 2026"
+    },
+    {
+      "type": "text",
+      "id": "plain_label",
+      "label": "Link simples (sem uppercase)",
+      "default": "Mais"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cashbar",
+      "label": "Mostrar barra de cashback",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cashbar_text",
+      "label": "Texto da barra de cashback",
+      "default": "10% DE CASHBACK"
+    }
+  ]
+}
+{% endschema %}

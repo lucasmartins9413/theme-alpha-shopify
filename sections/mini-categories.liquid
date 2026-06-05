@@ -1,0 +1,91 @@
+<section class="sec wrap" style="padding-top:34px;">
+  <div class="sec-head">
+    <div class="titles">
+      <h2>{{ section.settings.title }}</h2>
+      <p>{{ section.settings.subtitle }}</p>
+    </div>
+    <div class="sec-arrows">
+      <button class="iconbtn" data-scroll="miniScroll" data-dir="-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>
+      </button>
+      <button class="iconbtn" data-scroll="miniScroll" data-dir="1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="scroller" id="miniScroll">
+    {%- for block in section.blocks -%}
+      <a class="miniCat" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          {{ block.settings.image | image_url: width: 400 | image_tag: loading: 'lazy', alt: block.settings.label }}
+        {%- else -%}
+          {{ 'collection-apparel-2' | placeholder_svg_tag }}
+        {%- endif -%}
+        <div class="meta"><b>{{ block.settings.label }}</b></div>
+        <span class="circ">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "+ Categorias",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "+ Categorias"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "A tecnologia certa para o seu objetivo."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Mini Categoria",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Foto"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Nome",
+          "default": "Bonés"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "+ Categorias",
+      "blocks": [
+        { "type": "category", "settings": { "label": "Bonés" } },
+        { "type": "category", "settings": { "label": "Acessórios" } },
+        { "type": "category", "settings": { "label": "Cuecas" } },
+        { "type": "category", "settings": { "label": "Calças" } },
+        { "type": "category", "settings": { "label": "Casacos" } },
+        { "type": "category", "settings": { "label": "Meias" } },
+        { "type": "category", "settings": { "label": "Garrafas" } }
+      ]
+    }
+  ],
+  "max_blocks": 14
+}
+{% endschema %}

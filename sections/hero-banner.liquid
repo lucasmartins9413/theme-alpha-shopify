@@ -1,0 +1,134 @@
+<section class="hero">
+  {%- assign first_block = section.blocks.first -%}
+  {%- if first_block.settings.image != blank -%}
+    {{ first_block.settings.image | image_url: width: 1600 | image_tag: loading: 'eager', fetchpriority: 'high', alt: first_block.settings.image.alt }}
+  {%- else -%}
+    {{ 'lifestyle-1' | placeholder_svg_tag: 'hero__placeholder' }}
+  {%- endif -%}
+
+  <div class="hero-graf">
+    <div class="small">{{ first_block.settings.eyebrow }}</div>
+    <div class="big">{{ first_block.settings.heading }}</div>
+    <div class="tag">{{ first_block.settings.subheading }}</div>
+  </div>
+
+  {%- if section.blocks.size > 1 -%}
+    <button class="hero-nav prev" aria-label="Anterior">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>
+    </button>
+    <button class="hero-nav next" aria-label="Próximo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+    </button>
+  {%- endif -%}
+
+  <a class="hero-cta" href="{{ first_block.settings.cta_url }}">
+    <span>{{ first_block.settings.cta_label | default: 'Comprar Agora' }}</span>
+    <span class="circ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </a>
+
+  {%- if section.blocks.size > 1 -%}
+    <div class="hero-dots">
+      {%- for block in section.blocks -%}
+        <i {% if forloop.first %}class="on"{% endif %}></i>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+<script>
+(function(){
+  const blocks = {{ section.blocks | json }};
+  if (blocks.length <= 1) return;
+  const dots = document.querySelectorAll('.hero-dots i');
+  let hi = 0;
+  const heroImg = document.querySelector('.hero img');
+  const eyebrow = document.querySelector('.hero-graf .small');
+  const heading = document.querySelector('.hero-graf .big');
+  const sub = document.querySelector('.hero-graf .tag');
+  const ctaLink = document.querySelector('.hero-cta');
+  const ctaLabel = ctaLink?.querySelector('span');
+
+  function setHero(n) {
+    hi = (n + blocks.length) % blocks.length;
+    dots.forEach((d, i) => d.classList.toggle('on', i === hi));
+    const b = blocks[hi];
+    if (eyebrow) eyebrow.textContent = b.settings.eyebrow || '';
+    if (heading) heading.textContent = b.settings.heading || '';
+    if (sub) sub.textContent = b.settings.subheading || '';
+    if (ctaLabel) ctaLabel.textContent = b.settings.cta_label || 'Comprar Agora';
+    if (ctaLink) ctaLink.href = b.settings.cta_url || '#';
+  }
+
+  document.querySelector('.hero-nav.prev')?.addEventListener('click', () => setHero(hi - 1));
+  document.querySelector('.hero-nav.next')?.addEventListener('click', () => setHero(hi + 1));
+  setInterval(() => setHero(hi + 1), 6000);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Banner Hero",
+  "tag": "div",
+  "class": "hero-section",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagem do banner"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Texto pequeno (acima)",
+          "default": "SELEÇÃO"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Título grande",
+          "default": "OVER"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subtítulo",
+          "default": "Edição Limitada"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Texto do botão",
+          "default": "Comprar Agora"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "Link do botão"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner Hero",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "SELEÇÃO",
+            "heading": "OVER",
+            "subheading": "Edição Limitada",
+            "cta_label": "Comprar Agora"
+          }
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5
+}
+{% endschema %}

@@ -1,0 +1,59 @@
+{
+  "general": {
+    "search": "Buscar",
+    "account": "Minha conta",
+    "cart": "Sacola",
+    "close": "Fechar",
+    "back": "Voltar"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Adicionar à sacola",
+      "sold_out": "Esgotado",
+      "unavailable": "Indisponível",
+      "on_sale": "Promoção",
+      "quantity": "Quantidade",
+      "size": "Tamanho",
+      "color": "Cor",
+      "description": "Descrição",
+      "share": "Compartilhar",
+      "reviews_count": "avaliações",
+      "size_guide": "Guia de medidas"
+    }
+  },
+  "collection": {
+    "filters": "Filtros",
+    "sort_by": "Ordenar por",
+    "sort_options": {
+      "relevance": "Relevância",
+      "price_asc": "Menor preço",
+      "price_desc": "Maior preço",
+      "created_desc": "Mais novos",
+      "title_asc": "A–Z",
+      "title_desc": "Z–A"
+    },
+    "load_more": "Carregar mais",
+    "products_count_html": "{{ count }} produtos"
+  },
+  "cart": {
+    "title": "Minha Sacola",
+    "empty": "Sua sacola está vazia.",
+    "continue_shopping": "Continuar comprando",
+    "checkout": "Finalizar compra",
+    "subtotal": "Subtotal",
+    "discount": "Desconto",
+    "shipping": "Frete",
+    "total": "Total",
+    "coupon_placeholder": "Cupom de desconto",
+    "coupon_apply": "Aplicar",
+    "free_shipping": "GRÁTIS",
+    "secure_badge": "Compra 100% segura",
+    "items_count": {
+      "one": "{{ count }} item na sua sacola",
+      "other": "{{ count }} itens na sua sacola"
+    }
+  },
+  "accessibility": {
+    "skip_to_content": "Ir para o conteúdo principal"
+  }
+}

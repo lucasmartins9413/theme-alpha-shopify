@@ -1,0 +1,119 @@
+<div class="pagehero">
+  <div class="wrap">
+    {%- render 'breadcrumb' -%}
+    <h1>{{ collection.title }}</h1>
+    {%- if collection.description != blank -%}
+      <p class="sub">{{ collection.description }}</p>
+    {%- endif -%}
+    <div class="count">{{ collection.products_count }} produtos</div>
+
+    <div class="quickrow">
+      <button class="qchip on">Todos</button>
+      {%- for tag in collection.all_tags limit: 7 -%}
+        <button class="qchip">{{ tag }}</button>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="collection-layout">
+    <aside class="filters">
+      <div class="fblock">
+        <h4>Categoria <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg></h4>
+        <div class="fbody">
+          {%- for tag in collection.all_tags -%}
+            <label class="opt">
+              <input type="checkbox" name="tag" value="{{ tag }}" {% if current_tags contains tag %}checked{% endif %}>
+              {{ tag }}
+            </label>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <div class="fblock">
+        <h4>Tamanho <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg></h4>
+        <div class="fbody">
+          <div class="sizes">
+            {%- assign size_values = 'PP,P,M,G,GG,XGG' | split: ',' -%}
+            {%- for sz in size_values -%}
+              <span class="sizebox">{{ sz }}</span>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+
+      <div class="fblock">
+        <h4>Preço <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg></h4>
+        <div class="fbody">
+          <div class="pricefields">
+            <input type="text" value="R$ 0" />
+            <span>—</span>
+            <input type="text" value="R$ 250" />
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main>
+      <div class="toolbar">
+        <div class="activechips">
+          {%- for tag in current_tags -%}
+            <span class="achip">
+              {{ tag }}
+              <button aria-label="Remover">✕</button>
+            </span>
+          {%- endfor -%}
+        </div>
+        <div class="sortwrap">
+          <button class="sortbtn">
+            Ordenar: Relevância
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="product-grid">
+        {%- paginate collection.products by section.settings.products_per_page -%}
+          {%- for product in collection.products -%}
+            {%- render 'product-card', product: product -%}
+          {%- endfor -%}
+        {%- endpaginate -%}
+      </div>
+
+      {%- if collection.products_count > section.settings.products_per_page -%}
+        <div class="loadmore">
+          <p>Você viu <b>{{ section.settings.products_per_page }}</b> de {{ collection.products_count }} produtos</p>
+          <div class="barwrap">
+            <i style="width:{{ section.settings.products_per_page | times: 100 | divided_by: collection.products_count }}%"></i>
+          </div>
+          {%- if paginate.next -%}
+            <a class="btn-ghost" href="{{ paginate.next.url }}">Carregar mais</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </main>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Coleção Principal",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 6,
+      "max": 48,
+      "step": 6,
+      "default": 12,
+      "label": "Produtos por página"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Coleção Principal"
+    }
+  ]
+}
+{% endschema %}

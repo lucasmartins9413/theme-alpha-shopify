@@ -1,0 +1,225 @@
+<div class="wrap">
+  {%- render 'breadcrumb' -%}
+  <div class="pagetitle">
+    <h1>Minha Sacola</h1>
+    <p>{{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}itens{% endif %} na sua sacola</p>
+  </div>
+
+  {%- if cart.item_count > 0 -%}
+    <div class="cartgrid">
+      <!-- Items -->
+      <div>
+        {%- assign free_threshold = section.settings.free_shipping_threshold -%}
+        {%- assign threshold_cents = free_threshold | times: 100 -%}
+        {%- assign missing = threshold_cents | minus: cart.total_price -%}
+        <div class="freight">
+          <div class="txt">
+            {%- if cart.total_price >= threshold_cents -%}
+              Parabéns! Você ganhou <b>FRETE GRÁTIS</b> 🎉
+            {%- else -%}
+              Faltam <b>{{ missing | money }}</b> para você ganhar <b>FRETE GRÁTIS</b>! 🚚
+            {%- endif -%}
+          </div>
+          <div class="track">
+            <i style="width:{{ cart.total_price | times: 100 | divided_by: threshold_cents | at_most: 100 }}%"></i>
+          </div>
+        </div>
+
+        {%- for item in cart.items -%}
+          <div class="citem" data-key="{{ item.key }}">
+            <div class="ph">
+              <a href="{{ item.url }}">
+                {{ item.image | image_url: width: 300 | image_tag: loading: 'lazy', alt: item.title }}
+              </a>
+            </div>
+            <div>
+              <div class="nm">{{ item.product_title }}</div>
+              <div class="attrs">
+                {%- unless item.variant.title == 'Default Title' -%}
+                  {%- for option in item.options_with_values -%}
+                    <span class="attr">{{ option.name }}: {{ option.value }}</span>
+                  {%- endfor -%}
+                {%- endunless -%}
+              </div>
+              <div class="ctrl">
+                <div class="qty">
+                  <button type="button" class="qty-btn" data-key="{{ item.key }}" data-delta="-1">−</button>
+                  <span>{{ item.quantity }}</span>
+                  <button type="button" class="qty-btn" data-key="{{ item.key }}" data-delta="1">+</button>
+                </div>
+                <button type="button" class="rm" data-key="{{ item.key }}" data-action="remove">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+                  Remover
+                </button>
+              </div>
+            </div>
+            <div class="pricecol">
+              <span class="now">{{ item.final_line_price | money }}</span>
+              {%- if item.original_line_price > item.final_line_price -%}
+                <span class="old">{{ item.original_line_price | money }}</span>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+
+        <div class="cartfoot">
+          <a href="{{ routes.collections_url }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>
+            Continuar comprando
+          </a>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <aside class="summary">
+        <h3>Resumo do pedido</h3>
+        <div class="coupon">
+          <input type="text" placeholder="Cupom de desconto" id="couponInput">
+          <button type="button">Aplicar</button>
+        </div>
+
+        {%- assign subtotal_original = 0 -%}
+        {%- for item in cart.items -%}
+          {%- assign subtotal_original = subtotal_original | plus: item.original_line_price -%}
+        {%- endfor -%}
+        {%- assign discount_total = subtotal_original | minus: cart.total_price -%}
+
+        <div class="sline">Subtotal <b>{{ subtotal_original | money }}</b></div>
+        {%- if discount_total > 0 -%}
+          <div class="sline green">Desconto <span>– {{ discount_total | money }}</span></div>
+        {%- endif -%}
+        <div class="sline">Frete
+          {%- if cart.total_price >= threshold_cents -%}
+            <b style="color:var(--green)">GRÁTIS</b>
+          {%- else -%}
+            <b>Calculado no checkout</b>
+          {%- endif -%}
+        </div>
+        <div class="divider"></div>
+        <div class="total">
+          <span class="lbl">Total</span>
+          <span class="val">{{ cart.total_price | money }}</span>
+        </div>
+        <div class="total-sub">em até <b>10x sem juros</b> ou <b>{{ cart.total_price | times: 0.9 | money }}</b> no Pix</div>
+
+        <div class="cashback-bar">
+          <span class="ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </span>
+          Você vai receber <b style="margin:0 4px">{{ cart.total_price | times: 0.1 | money }}</b> de cashback
+        </div>
+
+        <a href="{{ routes.checkout }}" class="btn-solid checkout-btn">
+          Finalizar compra
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+
+        <div class="safe">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5z"/><path d="m9 12 2 2 4-4"/></svg>
+          Compra 100% segura
+        </div>
+
+        <div class="paysmini">
+          <span class="pay">PIX</span>
+          <span class="pay">VISA</span>
+          <span class="pay">MC</span>
+          <span class="pay">ELO</span>
+          <span class="pay">AMEX</span>
+          <span class="pay">BOLETO</span>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Suggestions -->
+    {%- if section.settings.suggestions_collection != blank -%}
+      {%- assign sug_col = collections[section.settings.suggestions_collection] -%}
+      {%- if sug_col != blank -%}
+        <section class="sec" style="padding-top:34px;">
+          <div class="sec-head">
+            <div class="titles">
+              <h2>Aproveite e leve junto</h2>
+              <p>Itens que combinam com a sua sacola.</p>
+            </div>
+            <div class="sec-arrows">
+              <button class="iconbtn" data-scroll="sugScroll" data-dir="-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>
+              </button>
+              <button class="iconbtn" data-scroll="sugScroll" data-dir="1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="scroller" id="sugScroll">
+            {%- for product in sug_col.products limit: 8 -%}
+              {%- render 'product-card', product: product -%}
+            {%- endfor -%}
+          </div>
+        </section>
+      {%- endif -%}
+    {%- endif -%}
+
+  {%- else -%}
+    <div style="text-align:center;padding:60px 0;">
+      <p style="font-size:16px;color:var(--muted);margin-bottom:24px;">Sua sacola está vazia.</p>
+      <a class="btn-solid" href="{{ routes.collections_url }}">Explorar produtos</a>
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+document.querySelectorAll('.qty-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const key = btn.dataset.key;
+    const delta = parseInt(btn.dataset.delta);
+    const span = btn.closest('.qty').querySelector('span');
+    const current = parseInt(span.textContent);
+    const newQty = Math.max(0, current + delta);
+    try {
+      await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: key, quantity: newQty })
+      });
+      location.reload();
+    } catch(e) {}
+  });
+});
+
+document.querySelectorAll('[data-action="remove"]').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const key = btn.dataset.key;
+    try {
+      await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: key, quantity: 0 })
+      });
+      location.reload();
+    } catch(e) {}
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Sacola Principal",
+  "settings": [
+    {
+      "type": "number",
+      "id": "free_shipping_threshold",
+      "label": "Valor para frete grátis (R$)",
+      "default": 199
+    },
+    {
+      "type": "collection",
+      "id": "suggestions_collection",
+      "label": "Coleção de sugestões"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sacola Principal"
+    }
+  ]
+}
+{% endschema %}

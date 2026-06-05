@@ -1,0 +1,79 @@
+<section class="sec wrap" style="padding-top:34px;">
+  <div class="banners">
+    {%- for block in section.blocks -%}
+      <div class="banner" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', alt: block.settings.title }}
+        {%- else -%}
+          {{ 'lifestyle-2' | placeholder_svg_tag }}
+        {%- endif -%}
+        <div class="meta">
+          {%- if block.settings.kicker != blank -%}
+            <div class="kicker">{{ block.settings.kicker }}</div>
+          {%- endif -%}
+          <h3>{{ block.settings.title }}</h3>
+          <a class="pill" href="{{ block.settings.url }}">
+            {{ block.settings.cta_label | default: 'Comprar Agora' }}
+            <span class="circ">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </a>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Banners de Coleção",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Banner",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagem"
+        },
+        {
+          "type": "text",
+          "id": "kicker",
+          "label": "Rótulo pequeno",
+          "default": "Compressão 2 em 1"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Aerofit"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Texto do botão",
+          "default": "Comprar Agora"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banners de Coleção",
+      "blocks": [
+        { "type": "banner", "settings": { "kicker": "Compressão 2 em 1", "title": "Aerofit" } },
+        { "type": "banner", "settings": { "kicker": "06.2026", "title": "Essential" } },
+        { "type": "banner", "settings": { "kicker": "Blindagem em movimento.", "title": "Inverno" } }
+      ]
+    }
+  ],
+  "max_blocks": 4
+}
+{% endschema %}

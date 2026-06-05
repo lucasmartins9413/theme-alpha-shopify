@@ -1,0 +1,71 @@
+<section class="sec wrap" style="padding-top:30px;">
+  <div class="sec-head" style="align-items:center;">
+    <div class="prod-filterbar">
+      <span class="chip-new">
+        <span class="dot">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1 3-1 4-1 6a3 3 0 0 0 6 0c0 4-2 5-2 8a3 3 0 1 1-6 0c0-2 1-3 1-5-2 1-3 3-3 5a6 6 0 1 0 11-3c0-5-3-7-6-11z"/></svg>
+        </span>
+        Novidade
+      </span>
+    </div>
+    <a class="seeall" href="{{ section.settings.collection | default: routes.collections_url }}">
+      Ver toda coleção
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+
+  <div class="scroller" id="prodScroll">
+    {%- assign featured = section.settings.collection_handle -%}
+    {%- if featured != blank -%}
+      {%- assign col = collections[featured] -%}
+      {%- for product in col.products limit: section.settings.products_limit -%}
+        {%- render 'product-card', product: product -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- for i in (1..8) -%}
+        <div class="pcard" style="flex:0 0 200px;">
+          <div class="ph">{{ 'product-apparel-1' | placeholder_svg_tag }}</div>
+          <h4>Produto de exemplo {{ i }}</h4>
+          <div class="prow">
+            <div class="pr"><b>R$ 99,90</b></div>
+            <button class="addbtn" aria-label="Adicionar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Produtos em Destaque",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection_handle",
+      "label": "Coleção"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "min": 4,
+      "max": 16,
+      "step": 1,
+      "default": 8,
+      "label": "Número de produtos"
+    },
+    {
+      "type": "url",
+      "id": "see_all_url",
+      "label": "Link 'Ver toda coleção'"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Produtos em Destaque"
+    }
+  ]
+}
+{% endschema %}

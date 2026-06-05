@@ -1,0 +1,13 @@
+{
+  "current": {
+    "color_accent": "#5f9e2e",
+    "color_accent_bright": "#6fb02f",
+    "color_promo": "#e21c1c",
+    "font_body": "'Archivo', system-ui, sans-serif",
+    "page_width": 1300,
+    "cashback_enabled": true,
+    "cashback_percent": 10,
+    "free_shipping_threshold": 199
+  },
+  "presets": {}
+}

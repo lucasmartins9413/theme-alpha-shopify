@@ -1,0 +1,88 @@
+<section class="sec wrap">
+  <div class="sec-head">
+    <div class="titles">
+      <h2>{{ section.settings.title }}</h2>
+      <p>{{ section.settings.subtitle }}</p>
+    </div>
+    <div class="sec-arrows">
+      <button class="iconbtn" data-scroll="kitScroll" data-dir="-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>
+      </button>
+      <button class="iconbtn" data-scroll="kitScroll" data-dir="1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="scroller" id="kitScroll">
+    {%- for block in section.blocks -%}
+      <a class="kitcard" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>
+        <h3>{{ block.settings.title }}</h3>
+        <p>{{ block.settings.description }}</p>
+        <span class="circ">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Kits de Performance",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "Kits de Performance"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "Praticidade e economia para o seu treino."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "kit",
+      "name": "Kit",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Nome do kit",
+          "default": "Kits Camisetas Dry Fit"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Descrição",
+          "default": "Elaboradas para um treino perfeito!"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kits de Performance",
+      "blocks": [
+        { "type": "kit", "settings": { "title": "Kits Camisetas Dry Fit", "description": "Elaboradas para um treino perfeito!" } },
+        { "type": "kit", "settings": { "title": "Kits Camisetas Oversized", "description": "Economize até 40% na compra conjunta." } },
+        { "type": "kit", "settings": { "title": "Kits Camisetas + Bermudas", "description": "Conjuntos Perfeito" } },
+        { "type": "kit", "settings": { "title": "Kits Bermudas Dry Fit", "description": "Mais performance com mais desconto." } },
+        { "type": "kit", "settings": { "title": "Kits Camisetas Apex", "description": "O Kit de Alta Performance" } },
+        { "type": "kit", "settings": { "title": "Kits Cuecas Algodão", "description": "Seu dia a dia com mais conforto." } },
+        { "type": "kit", "settings": { "title": "Kits Shorts Dry Fit", "description": "Escolha suas cores e tamanhos favoritos." } }
+      ]
+    }
+  ],
+  "max_blocks": 12
+}
+{% endschema %}

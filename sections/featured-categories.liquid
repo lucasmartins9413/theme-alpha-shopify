@@ -1,0 +1,108 @@
+<section class="sec wrap">
+  <div class="sec-head">
+    <div class="tabs">
+      <button class="on" data-tab="m">{{ section.settings.tab_label_1 }}</button>
+      <button data-tab="f">{{ section.settings.tab_label_2 }}</button>
+    </div>
+    <div class="sec-arrows">
+      <button class="iconbtn" data-scroll="catScroll" data-dir="-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>
+      </button>
+      <button class="iconbtn" data-scroll="catScroll" data-dir="1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="scroller" id="catScroll">
+    {%- for block in section.blocks -%}
+      <a class="catcard" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          {{ block.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.kicker }}
+        {%- else -%}
+          {{ 'collection-apparel-1' | placeholder_svg_tag }}
+        {%- endif -%}
+        <div class="meta">
+          <div class="kicker">{{ block.settings.kicker }}</div>
+          <div class="price">
+            {{ block.settings.price_label }}
+            <small>{{ block.settings.price_from }}</small>
+          </div>
+        </div>
+        <span class="circ">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Categorias em Destaque",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tab_label_1",
+      "label": "Aba 1",
+      "default": "Masculino"
+    },
+    {
+      "type": "text",
+      "id": "tab_label_2",
+      "label": "Aba 2",
+      "default": "Feminino"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Categoria",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Foto da categoria"
+        },
+        {
+          "type": "text",
+          "id": "kicker",
+          "label": "Rótulo pequeno",
+          "default": "Essential Dry Fit"
+        },
+        {
+          "type": "text",
+          "id": "price_label",
+          "label": "Texto do preço",
+          "default": "A partir de"
+        },
+        {
+          "type": "text",
+          "id": "price_from",
+          "label": "Preço",
+          "default": "R$33,33"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Categorias em Destaque",
+      "blocks": [
+        { "type": "category", "settings": { "kicker": "Essential Dry Fit", "price_from": "R$33,33" } },
+        { "type": "category", "settings": { "kicker": "Oversized", "price_from": "R$39,99" } },
+        { "type": "category", "settings": { "kicker": "Bermudas/Shorts", "price_from": "R$49,99" } },
+        { "type": "category", "settings": { "kicker": "Apex Pro", "price_label": "Sem Limites" } },
+        { "type": "category", "settings": { "kicker": "Thermaflow", "price_from": "R$62" } },
+        { "type": "category", "settings": { "kicker": "Regatas", "price_from": "R$29,99" } }
+      ]
+    }
+  ],
+  "max_blocks": 10
+}
+{% endschema %}

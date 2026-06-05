@@ -1,0 +1,37 @@
+{%- if section.settings.enabled -%}
+<div class="announce">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M1 3h13v10H1zM14 6h4l3 3v4h-7"/><circle cx="5.5" cy="16.5" r="2.2"/><circle cx="17.5" cy="16.5" r="2.2"/></svg>
+  <span>{{ section.settings.text | replace: '{threshold}', section.settings.free_shipping_threshold | money_without_trailing_zeros }}</span>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Barra de Aviso",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Mostrar barra de aviso",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Texto",
+      "default": "FRETE GRÁTIS acima de R$ 199,00 🚚"
+    },
+    {
+      "type": "number",
+      "id": "free_shipping_threshold",
+      "label": "Valor para frete grátis (centavos)",
+      "default": 19900
+    }
+  ],
+  "presets": [
+    {
+      "name": "Barra de Aviso"
+    }
+  ]
+}
+{% endschema %}
