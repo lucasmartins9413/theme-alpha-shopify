@@ -33,22 +33,11 @@
             "cta_label": "Comprar Agora",
             "cta_url": ""
           }
-        },
-        "slide-1": {
-          "type": "slide",
-          "settings": {
-            "eyebrow": "SELEÇÃO",
-            "heading": "OVER",
-            "subheading": "Edição Limitada",
-            "cta_label": "",
-            "cta_url": ""
-          }
         }
       },
       "block_order": [
         "slide_hAkAe8",
-        "slide_wwfc4C",
-        "slide-1"
+        "slide_wwfc4C"
       ],
       "settings": {}
     },
