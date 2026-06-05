@@ -28,9 +28,9 @@
           "settings": {
             "image": "shopify://shop_images/banner_alpha_2.png",
             "eyebrow": "SELEÇÃO",
-            "heading": "OVER",
+            "heading": "OVERTOP",
             "subheading": "Edição Limitada",
-            "cta_label": "Comprar Agora",
+            "cta_label": "Comprar agora",
             "cta_url": ""
           }
         }
