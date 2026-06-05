@@ -23,6 +23,10 @@
     <span class="sep">/</span>
     <b>Minha Sacola</b>
 
+  {%- elsif template.name == 'list-collections' -%}
+    <span class="sep">/</span>
+    <b>Coleções</b>
+
   {%- elsif template.name == 'page' -%}
     <span class="sep">/</span>
     <b>{{ page.title }}</b>

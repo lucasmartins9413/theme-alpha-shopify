@@ -1,0 +1,254 @@
+<!-- PAGE HERO -->
+<div class="pagehero">
+  <div class="wrap">
+    {%- render 'breadcrumb' -%}
+    <h1>{{ section.settings.title }}</h1>
+    {%- if section.settings.description != blank -%}
+      <p class="sub">{{ section.settings.description }}</p>
+    {%- endif -%}
+
+    {%- comment -%} Quick filter chips — só aparece se tiver blocos configurados {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="quickrow">
+        <a class="qchip {% if current_tags == blank and template.suffix == blank %}on{% endif %}"
+           href="{{ routes.collections_url }}">
+          Todas
+        </a>
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'filter_chip' -%}
+            <a class="qchip" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>
+              {{ block.settings.label }}
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<!-- COLLECTIONS GRID -->
+<div class="wrap">
+  <div class="colpage-toolbar">
+    <p class="colpage-count" id="colCount"></p>
+    <div class="sortwrap">
+      <button class="sortbtn" id="sortBtn">
+        Ordenar: A–Z
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="sort-dropdown" id="sortDropdown" hidden>
+        <button data-sort="az">A – Z</button>
+        <button data-sort="za">Z – A</button>
+        <button data-sort="count-desc">Mais produtos</button>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%}
+    Build the collections array. If manual blocks of type 'collection' exist, use those;
+    otherwise fall back to iterating all collections.
+  {%- endcomment -%}
+
+  {%- assign manual_cols = section.blocks | where: 'type', 'collection' -%}
+
+  {%- if manual_cols.size > 0 -%}
+
+    <div class="collections-grid cols-{{ section.settings.columns }}">
+      {%- for block in manual_cols -%}
+        {%- assign col = collections[block.settings.collection_handle] -%}
+        {%- if col != blank -%}
+          <a class="colcard" href="{{ col.url }}" {{ block.shopify_attributes }}>
+            <div class="colcard-img">
+              {%- if col.image -%}
+                {{ col.image | image_url: width: 800 | image_tag: loading: 'lazy', alt: col.title }}
+              {%- elsif col.products.first.featured_image -%}
+                {{ col.products.first.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: col.title }}
+              {%- else -%}
+                {{ 'collection-apparel-1' | placeholder_svg_tag }}
+              {%- endif -%}
+            </div>
+            <div class="colcard-info">
+              {%- if block.settings.kicker != blank -%}
+                <span class="colcard-kicker">{{ block.settings.kicker }}</span>
+              {%- endif -%}
+              <h2 class="colcard-title">{{ col.title }}</h2>
+              <span class="colcard-count">{{ col.products_count }} produtos</span>
+            </div>
+            <span class="circ colcard-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+  {%- else -%}
+
+    {%- comment -%} Auto-list: all collections, limit per page via paginate {%- endcomment -%}
+    {%- assign cols_per_page = section.settings.cols_per_page -%}
+    {%- paginate collections by cols_per_page -%}
+
+      <div class="collections-grid cols-{{ section.settings.columns }}" id="colsGrid">
+        {%- for col in collections -%}
+          {%- unless col.handle == 'frontpage' -%}
+            <a class="colcard" href="{{ col.url }}">
+              <div class="colcard-img">
+                {%- if col.image -%}
+                  {{ col.image | image_url: width: 800 | image_tag: loading: 'lazy', alt: col.title }}
+                {%- elsif col.products.first.featured_image -%}
+                  {{ col.products.first.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: col.title }}
+                {%- else -%}
+                  {{ 'collection-apparel-1' | placeholder_svg_tag }}
+                {%- endif -%}
+              </div>
+              <div class="colcard-info">
+                <h2 class="colcard-title">{{ col.title }}</h2>
+                <span class="colcard-count">{{ col.products_count }} produtos</span>
+              </div>
+              <span class="circ colcard-arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+            </a>
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <div class="loadmore">
+          <p>Você viu <b>{{ paginate.current_offset | plus: paginate.page_size | at_most: paginate.items }}</b> de {{ paginate.items }} coleções</p>
+          <div class="barwrap">
+            <i style="width:{{ paginate.current_page | times: 100 | divided_by: paginate.pages }}%"></i>
+          </div>
+          {%- if paginate.next -%}
+            <a class="btn-ghost" href="{{ paginate.next.url }}">Carregar mais</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+    {%- endpaginate -%}
+
+  {%- endif -%}
+</div>
+
+<script>
+(function () {
+  /* ---- Sort dropdown toggle ---- */
+  var sortBtn = document.getElementById('sortBtn');
+  var dropdown = document.getElementById('sortDropdown');
+  if (sortBtn && dropdown) {
+    sortBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      dropdown.hidden = !dropdown.hidden;
+    });
+    document.addEventListener('click', function () { dropdown.hidden = true; });
+
+    dropdown.querySelectorAll('button[data-sort]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var sort = btn.dataset.sort;
+        var grid = document.querySelector('.collections-grid');
+        if (!grid) return;
+        var cards = Array.from(grid.querySelectorAll('.colcard'));
+        cards.sort(function (a, b) {
+          var ta = a.querySelector('.colcard-title')?.textContent.trim() || '';
+          var tb = b.querySelector('.colcard-title')?.textContent.trim() || '';
+          var ca = parseInt(a.querySelector('.colcard-count')?.textContent) || 0;
+          var cb = parseInt(b.querySelector('.colcard-count')?.textContent) || 0;
+          if (sort === 'az') return ta.localeCompare(tb, 'pt');
+          if (sort === 'za') return tb.localeCompare(ta, 'pt');
+          if (sort === 'count-desc') return cb - ca;
+          return 0;
+        });
+        cards.forEach(function (c) { grid.appendChild(c); });
+        sortBtn.firstChild.textContent = btn.textContent + ' ';
+        dropdown.hidden = true;
+      });
+    });
+  }
+
+  /* ---- Live count update ---- */
+  var countEl = document.getElementById('colCount');
+  if (countEl) {
+    var n = document.querySelectorAll('.colcard').length;
+    countEl.textContent = n + (n === 1 ? ' coleção' : ' coleções');
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Lista de Coleções",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título da página",
+      "default": "Todas as Coleções"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Descrição",
+      "default": "Explore todas as linhas da ALPHA e encontre a tecnologia certa para o seu objetivo."
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Colunas",
+      "options": [
+        { "value": "2", "label": "2 colunas" },
+        { "value": "3", "label": "3 colunas" },
+        { "value": "4", "label": "4 colunas" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "range",
+      "id": "cols_per_page",
+      "min": 6,
+      "max": 48,
+      "step": 6,
+      "default": 18,
+      "label": "Coleções por página (modo automático)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Coleção manual",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection_handle",
+          "label": "Coleção"
+        },
+        {
+          "type": "text",
+          "id": "kicker",
+          "label": "Rótulo opcional (ex: Lançamento)"
+        }
+      ]
+    },
+    {
+      "type": "filter_chip",
+      "name": "Chip de filtro rápido",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Texto do chip",
+          "default": "Kits"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lista de Coleções"
+    }
+  ]
+}
+{% endschema %}

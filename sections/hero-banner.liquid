@@ -1,16 +1,36 @@
 <section class="hero">
-  {%- assign first_block = section.blocks.first -%}
-  {%- if first_block.settings.image != blank -%}
-    {{ first_block.settings.image | image_url: width: 1600 | image_tag: loading: 'eager', fetchpriority: 'high', alt: first_block.settings.image.alt }}
-  {%- else -%}
-    {{ 'lifestyle-1' | placeholder_svg_tag: 'hero__placeholder' }}
-  {%- endif -%}
+  {%- for block in section.blocks -%}
+    <div class="hero-slide{% if forloop.first %} active{% endif %}" {{ block.shopify_attributes }}>
+      {%- if block.settings.image != blank -%}
+        {%- if forloop.first -%}
+          {{ block.settings.image | image_url: width: 1600 | image_tag: loading: 'eager', fetchpriority: 'high', alt: block.settings.image.alt }}
+        {%- else -%}
+          {{ block.settings.image | image_url: width: 1600 | image_tag: loading: 'lazy', alt: block.settings.image.alt }}
+        {%- endif -%}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag }}
+      {%- endif -%}
 
-  <div class="hero-graf">
-    <div class="small">{{ first_block.settings.eyebrow }}</div>
-    <div class="big">{{ first_block.settings.heading }}</div>
-    <div class="tag">{{ first_block.settings.subheading }}</div>
-  </div>
+      <div class="hero-graf">
+        {%- if block.settings.eyebrow != blank -%}
+          <div class="small">{{ block.settings.eyebrow }}</div>
+        {%- endif -%}
+        {%- if block.settings.heading != blank -%}
+          <div class="big">{{ block.settings.heading }}</div>
+        {%- endif -%}
+        {%- if block.settings.subheading != blank -%}
+          <div class="tag">{{ block.settings.subheading }}</div>
+        {%- endif -%}
+      </div>
+
+      <a class="hero-cta" href="{{ block.settings.cta_url | default: '#' }}">
+        <span>{{ block.settings.cta_label | default: 'Comprar Agora' }}</span>
+        <span class="circ">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+    </div>
+  {%- endfor -%}
 
   {%- if section.blocks.size > 1 -%}
     <button class="hero-nav prev" aria-label="Anterior">
@@ -19,57 +39,48 @@
     <button class="hero-nav next" aria-label="Próximo">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
     </button>
-  {%- endif -%}
-
-  <a class="hero-cta" href="{{ first_block.settings.cta_url }}">
-    <span>{{ first_block.settings.cta_label | default: 'Comprar Agora' }}</span>
-    <span class="circ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-  </a>
-
-  {%- if section.blocks.size > 1 -%}
     <div class="hero-dots">
       {%- for block in section.blocks -%}
-        <i {% if forloop.first %}class="on"{% endif %}></i>
+        <i{% if forloop.first %} class="on"{% endif %}></i>
       {%- endfor -%}
     </div>
   {%- endif -%}
 </section>
 
 <script>
-(function(){
-  const blocks = {{ section.blocks | json }};
-  if (blocks.length <= 1) return;
-  const dots = document.querySelectorAll('.hero-dots i');
-  let hi = 0;
-  const heroImg = document.querySelector('.hero img');
-  const eyebrow = document.querySelector('.hero-graf .small');
-  const heading = document.querySelector('.hero-graf .big');
-  const sub = document.querySelector('.hero-graf .tag');
-  const ctaLink = document.querySelector('.hero-cta');
-  const ctaLabel = ctaLink?.querySelector('span');
+(function () {
+  var hero = document.querySelector('.hero');
+  if (!hero) return;
+  var slides = hero.querySelectorAll('.hero-slide');
+  var dots   = hero.querySelectorAll('.hero-dots i');
+  if (slides.length <= 1) return;
 
-  function setHero(n) {
-    hi = (n + blocks.length) % blocks.length;
-    dots.forEach((d, i) => d.classList.toggle('on', i === hi));
-    const b = blocks[hi];
-    if (eyebrow) eyebrow.textContent = b.settings.eyebrow || '';
-    if (heading) heading.textContent = b.settings.heading || '';
-    if (sub) sub.textContent = b.settings.subheading || '';
-    if (ctaLabel) ctaLabel.textContent = b.settings.cta_label || 'Comprar Agora';
-    if (ctaLink) ctaLink.href = b.settings.cta_url || '#';
+  var current = 0;
+  var timer;
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    if (dots[current]) dots[current].classList.remove('on');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    if (dots[current]) dots[current].classList.add('on');
   }
 
-  document.querySelector('.hero-nav.prev')?.addEventListener('click', () => setHero(hi - 1));
-  document.querySelector('.hero-nav.next')?.addEventListener('click', () => setHero(hi + 1));
-  setInterval(() => setHero(hi + 1), 6000);
+  function startTimer() {
+    clearInterval(timer);
+    timer = setInterval(function () { goTo(current + 1); }, 6000);
+  }
+
+  hero.querySelector('.hero-nav.prev').addEventListener('click', function () { goTo(current - 1); startTimer(); });
+  hero.querySelector('.hero-nav.next').addEventListener('click', function () { goTo(current + 1); startTimer(); });
+
+  startTimer();
 })();
 </script>
 
 {% schema %}
 {
   "name": "Banner Hero",
-  "tag": "div",
-  "class": "hero-section",
   "settings": [],
   "blocks": [
     {
@@ -85,30 +96,30 @@
           "type": "text",
           "id": "eyebrow",
           "label": "Texto pequeno (acima)",
-          "default": "SELEÇÃO"
+          "default": "SELECAO"
         },
         {
           "type": "text",
           "id": "heading",
-          "label": "Título grande",
+          "label": "Titulo grande",
           "default": "OVER"
         },
         {
           "type": "text",
           "id": "subheading",
-          "label": "Subtítulo",
-          "default": "Edição Limitada"
+          "label": "Subtitulo",
+          "default": "Edicao Limitada"
         },
         {
           "type": "text",
           "id": "cta_label",
-          "label": "Texto do botão",
+          "label": "Texto do botao",
           "default": "Comprar Agora"
         },
         {
           "type": "url",
           "id": "cta_url",
-          "label": "Link do botão"
+          "label": "Link do botao"
         }
       ]
     }
@@ -120,9 +131,9 @@
         {
           "type": "slide",
           "settings": {
-            "eyebrow": "SELEÇÃO",
+            "eyebrow": "SELECAO",
             "heading": "OVER",
-            "subheading": "Edição Limitada",
+            "subheading": "Edicao Limitada",
             "cta_label": "Comprar Agora"
           }
         }

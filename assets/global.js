@@ -133,19 +133,6 @@ window.qd = d => {
   if (el) el.textContent = qty;
 };
 
-/* ---- Hero carousel ---- */
-const heroDots = document.querySelectorAll('.hero-dots i');
-if (heroDots.length) {
-  let hi = 0;
-  const setHero = n => {
-    hi = (n + heroDots.length) % heroDots.length;
-    heroDots.forEach((d, i) => d.classList.toggle('on', i === hi));
-  };
-  document.querySelector('.hero-nav.prev')?.addEventListener('click', () => setHero(hi - 1));
-  document.querySelector('.hero-nav.next')?.addEventListener('click', () => setHero(hi + 1));
-  setInterval(() => setHero(hi + 1), 6000);
-}
-
 /* ---- Cart page: CEP / shipping calc (stub) ---- */
 document.querySelector('.cep .go')?.addEventListener('click', () => {
   const input = document.querySelector('.cep input');

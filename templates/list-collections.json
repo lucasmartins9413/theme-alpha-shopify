@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-list-collections",
+      "settings": {
+        "title": "Todas as Coleções",
+        "description": "Explore todas as linhas da ALPHA e encontre a tecnologia certa para o seu objetivo.",
+        "columns": "3",
+        "cols_per_page": 18
+      }
+    }
+  },
+  "order": ["main"]
+}
