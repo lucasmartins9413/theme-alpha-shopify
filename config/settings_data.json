@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
     "color_accent": "#5f9e2e",
@@ -7,7 +16,38 @@
     "page_width": 1300,
     "cashback_enabled": true,
     "cashback_percent": 10,
-    "free_shipping_threshold": 199
+    "free_shipping_threshold": 199,
+    "sections": {
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "settings": {
+          "enabled": true,
+          "text": "FRETE GRATIS acima de R$ 199,00"
+        }
+      },
+      "header": {
+        "type": "header",
+        "settings": {
+          "menu": "main-menu",
+          "accent_label": "Copa 2026",
+          "plain_label": "Mais",
+          "show_cashbar": true,
+          "cashbar_text": "10% DE CASHBACK"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "tagline": "A marca mais presente nas academias",
+          "copyright_text": "© 2026 Alpha. CNPJ: 27.672.847/0001-79",
+          "instagram": "",
+          "facebook": "",
+          "tiktok": "",
+          "youtube": ""
+        }
+      }
+    },
+    "content_for_index": []
   },
   "presets": {}
 }

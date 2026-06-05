@@ -47,10 +47,11 @@
         "cat-1": {
           "type": "category",
           "settings": {
+            "image": "shopify://shop_images/banner_alpha_2.png",
             "kicker": "Essential Dry Fit",
             "price_label": "A partir de",
             "price_from": "R$33,33",
-            "url": ""
+            "url": "shopify://collections"
           }
         },
         "cat-2": {
