@@ -58,13 +58,15 @@
         {%- if col != blank -%}
           <a class="colcard" href="{{ col.url }}" {{ block.shopify_attributes }}>
             <div class="colcard-img">
-              {%- if col.image -%}
-                {{ col.image | image_url: width: 800 | image_tag: loading: 'lazy', alt: col.title }}
-              {%- elsif col.products.first.featured_image -%}
-                {{ col.products.first.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: col.title }}
-              {%- else -%}
-                {{ 'collection-apparel-1' | placeholder_svg_tag }}
-              {%- endif -%}
+              {%- assign _col_img = col.image | default: col.products.first.featured_image -%}
+              {%- render 'responsive-image',
+                image: _col_img,
+                mobile_image: block.settings.mobile_image,
+                width: 800,
+                mobile_width: 600,
+                loading: 'lazy',
+                alt: col.title,
+                placeholder: 'collection-apparel-1' -%}
             </div>
             <div class="colcard-info">
               {%- if block.settings.kicker != blank -%}
@@ -92,13 +94,13 @@
           {%- unless col.handle == 'frontpage' -%}
             <a class="colcard" href="{{ col.url }}">
               <div class="colcard-img">
-                {%- if col.image -%}
-                  {{ col.image | image_url: width: 800 | image_tag: loading: 'lazy', alt: col.title }}
-                {%- elsif col.products.first.featured_image -%}
-                  {{ col.products.first.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: col.title }}
-                {%- else -%}
-                  {{ 'collection-apparel-1' | placeholder_svg_tag }}
-                {%- endif -%}
+                {%- assign _col_img = col.image | default: col.products.first.featured_image -%}
+                {%- render 'responsive-image',
+                  image: _col_img,
+                  width: 800,
+                  loading: 'lazy',
+                  alt: col.title,
+                  placeholder: 'collection-apparel-1' -%}
               </div>
               <div class="colcard-info">
                 <h2 class="colcard-title">{{ col.title }}</h2>
@@ -219,6 +221,11 @@
           "type": "collection",
           "id": "collection_handle",
           "label": "Coleção"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Imagem mobile (opcional, até 767px)"
         },
         {
           "type": "text",

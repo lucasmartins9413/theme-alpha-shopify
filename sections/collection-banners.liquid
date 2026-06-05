@@ -2,11 +2,14 @@
   <div class="banners">
     {%- for block in section.blocks -%}
       <div class="banner" {{ block.shopify_attributes }}>
-        {%- if block.settings.image != blank -%}
-          {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', alt: block.settings.title }}
-        {%- else -%}
-          {{ 'lifestyle-2' | placeholder_svg_tag }}
-        {%- endif -%}
+        {%- render 'responsive-image',
+          image: block.settings.image,
+          mobile_image: block.settings.mobile_image,
+          width: 900,
+          mobile_width: 600,
+          loading: 'lazy',
+          alt: block.settings.title,
+          placeholder: 'lifestyle-2' -%}
         <div class="meta">
           {%- if block.settings.kicker != blank -%}
             <div class="kicker">{{ block.settings.kicker }}</div>
@@ -37,6 +40,11 @@
           "type": "image_picker",
           "id": "image",
           "label": "Imagem"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Imagem mobile (opcional, até 767px)"
         },
         {
           "type": "text",

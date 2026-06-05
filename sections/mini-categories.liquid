@@ -17,11 +17,14 @@
   <div class="scroller" id="miniScroll">
     {%- for block in section.blocks -%}
       <a class="miniCat" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>
-        {%- if block.settings.image != blank -%}
-          {{ block.settings.image | image_url: width: 400 | image_tag: loading: 'lazy', alt: block.settings.label }}
-        {%- else -%}
-          {{ 'collection-apparel-2' | placeholder_svg_tag }}
-        {%- endif -%}
+        {%- render 'responsive-image',
+          image: block.settings.image,
+          mobile_image: block.settings.mobile_image,
+          width: 400,
+          mobile_width: 300,
+          loading: 'lazy',
+          alt: block.settings.label,
+          placeholder: 'collection-apparel-2' -%}
         <div class="meta"><b>{{ block.settings.label }}</b></div>
         <span class="circ">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -57,6 +60,11 @@
           "type": "image_picker",
           "id": "image",
           "label": "Foto"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Foto mobile (opcional, até 767px)"
         },
         {
           "type": "text",

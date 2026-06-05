@@ -17,11 +17,14 @@
   <div class="scroller" id="catScroll">
     {%- for block in section.blocks -%}
       <a class="catcard" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>
-        {%- if block.settings.image != blank -%}
-          {{ block.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.kicker }}
-        {%- else -%}
-          {{ 'collection-apparel-1' | placeholder_svg_tag }}
-        {%- endif -%}
+        {%- render 'responsive-image',
+          image: block.settings.image,
+          mobile_image: block.settings.mobile_image,
+          width: 600,
+          mobile_width: 480,
+          loading: 'lazy',
+          alt: block.settings.kicker,
+          placeholder: 'collection-apparel-1' -%}
         <div class="meta">
           <div class="kicker">{{ block.settings.kicker }}</div>
           <div class="price">
@@ -63,6 +66,11 @@
           "type": "image_picker",
           "id": "image",
           "label": "Foto da categoria"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Foto mobile (opcional, até 767px)"
         },
         {
           "type": "text",
