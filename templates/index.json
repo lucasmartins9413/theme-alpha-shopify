@@ -16,6 +16,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/banner_alpha_1.png",
+            "mobile_image": "shopify://shop_images/windows-11-dark-3840x2160-20664.jpg",
             "eyebrow": "SELEÇÃO",
             "heading": "OVER",
             "subheading": "Edição Limitada",
