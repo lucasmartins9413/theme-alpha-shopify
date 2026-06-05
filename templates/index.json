@@ -1,71 +1,313 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero-banner": {
       "type": "hero-banner",
       "blocks": {
+        "slide_hAkAe8": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/banner_alpha_1.png",
+            "eyebrow": "SELEÇÃO",
+            "heading": "OVER",
+            "subheading": "Edição Limitada",
+            "cta_label": "Comprar Agora",
+            "cta_url": ""
+          }
+        },
+        "slide_wwfc4C": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/banner_alpha_2.png",
+            "eyebrow": "SELEÇÃO",
+            "heading": "OVER",
+            "subheading": "Edição Limitada",
+            "cta_label": "Comprar Agora",
+            "cta_url": ""
+          }
+        },
         "slide-1": {
           "type": "slide",
           "settings": {
             "eyebrow": "SELEÇÃO",
             "heading": "OVER",
             "subheading": "Edição Limitada",
-            "cta_label": "Comprar Agora"
+            "cta_label": "",
+            "cta_url": ""
           }
         }
       },
-      "block_order": ["slide-1"]
+      "block_order": [
+        "slide_hAkAe8",
+        "slide_wwfc4C",
+        "slide-1"
+      ],
+      "settings": {}
     },
     "featured-categories": {
       "type": "featured-categories",
       "blocks": {
-        "cat-1": { "type": "category", "settings": { "kicker": "Essential Dry Fit", "price_label": "A partir de", "price_from": "R$33,33" } },
-        "cat-2": { "type": "category", "settings": { "kicker": "Oversized", "price_label": "A partir de", "price_from": "R$39,99" } },
-        "cat-3": { "type": "category", "settings": { "kicker": "Bermudas/Shorts", "price_label": "A partir de", "price_from": "R$49,99" } },
-        "cat-4": { "type": "category", "settings": { "kicker": "Apex Pro", "price_label": "Sem Limites", "price_from": "A melhor do Brasil" } },
-        "cat-5": { "type": "category", "settings": { "kicker": "Thermaflow", "price_label": "Poliamida", "price_from": "A partir de R$62" } },
-        "cat-6": { "type": "category", "settings": { "kicker": "Regatas", "price_label": "A partir de", "price_from": "R$29,99" } }
+        "cat-1": {
+          "type": "category",
+          "settings": {
+            "kicker": "Essential Dry Fit",
+            "price_label": "A partir de",
+            "price_from": "R$33,33",
+            "url": ""
+          }
+        },
+        "cat-2": {
+          "type": "category",
+          "settings": {
+            "kicker": "Oversized",
+            "price_label": "A partir de",
+            "price_from": "R$39,99",
+            "url": ""
+          }
+        },
+        "cat-3": {
+          "type": "category",
+          "settings": {
+            "kicker": "Bermudas/Shorts",
+            "price_label": "A partir de",
+            "price_from": "R$49,99",
+            "url": ""
+          }
+        },
+        "cat-4": {
+          "type": "category",
+          "settings": {
+            "kicker": "Apex Pro",
+            "price_label": "Sem Limites",
+            "price_from": "A melhor do Brasil",
+            "url": ""
+          }
+        },
+        "cat-5": {
+          "type": "category",
+          "settings": {
+            "kicker": "Thermaflow",
+            "price_label": "Poliamida",
+            "price_from": "A partir de R$62",
+            "url": ""
+          }
+        },
+        "cat-6": {
+          "type": "category",
+          "settings": {
+            "kicker": "Regatas",
+            "price_label": "A partir de",
+            "price_from": "R$29,99",
+            "url": ""
+          }
+        }
       },
-      "block_order": ["cat-1","cat-2","cat-3","cat-4","cat-5","cat-6"]
+      "block_order": [
+        "cat-1",
+        "cat-2",
+        "cat-3",
+        "cat-4",
+        "cat-5",
+        "cat-6"
+      ],
+      "settings": {
+        "tab_label_1": "Masculino",
+        "tab_label_2": "Feminino"
+      }
     },
     "performance-kits": {
       "type": "performance-kits",
       "blocks": {
-        "kit-1": { "type": "kit", "settings": { "title": "Kits Camisetas Dry Fit", "description": "Elaboradas para um treino perfeito!" } },
-        "kit-2": { "type": "kit", "settings": { "title": "Kits Camisetas Oversized", "description": "Economize até 40% na compra conjunta." } },
-        "kit-3": { "type": "kit", "settings": { "title": "Kits Camisetas + Bermudas", "description": "Conjuntos Perfeito" } },
-        "kit-4": { "type": "kit", "settings": { "title": "Kits Bermudas Dry Fit", "description": "Mais performance com mais desconto." } },
-        "kit-5": { "type": "kit", "settings": { "title": "Kits Camisetas Apex", "description": "O Kit de Alta Performance" } },
-        "kit-6": { "type": "kit", "settings": { "title": "Kits Cuecas Algodão", "description": "Seu dia a dia com mais conforto." } },
-        "kit-7": { "type": "kit", "settings": { "title": "Kits Shorts Dry Fit", "description": "Escolha suas cores e tamanhos favoritos." } }
+        "kit-1": {
+          "type": "kit",
+          "settings": {
+            "title": "Kits Camisetas Dry Fit",
+            "description": "Elaboradas para um treino perfeito!",
+            "url": ""
+          }
+        },
+        "kit-2": {
+          "type": "kit",
+          "settings": {
+            "title": "Kits Camisetas Oversized",
+            "description": "Economize até 40% na compra conjunta.",
+            "url": ""
+          }
+        },
+        "kit-3": {
+          "type": "kit",
+          "settings": {
+            "title": "Kits Camisetas + Bermudas",
+            "description": "Conjuntos Perfeito",
+            "url": ""
+          }
+        },
+        "kit-4": {
+          "type": "kit",
+          "settings": {
+            "title": "Kits Bermudas Dry Fit",
+            "description": "Mais performance com mais desconto.",
+            "url": ""
+          }
+        },
+        "kit-5": {
+          "type": "kit",
+          "settings": {
+            "title": "Kits Camisetas Apex",
+            "description": "O Kit de Alta Performance",
+            "url": ""
+          }
+        },
+        "kit-6": {
+          "type": "kit",
+          "settings": {
+            "title": "Kits Cuecas Algodão",
+            "description": "Seu dia a dia com mais conforto.",
+            "url": ""
+          }
+        },
+        "kit-7": {
+          "type": "kit",
+          "settings": {
+            "title": "Kits Shorts Dry Fit",
+            "description": "Escolha suas cores e tamanhos favoritos.",
+            "url": ""
+          }
+        }
       },
-      "block_order": ["kit-1","kit-2","kit-3","kit-4","kit-5","kit-6","kit-7"]
+      "block_order": [
+        "kit-1",
+        "kit-2",
+        "kit-3",
+        "kit-4",
+        "kit-5",
+        "kit-6",
+        "kit-7"
+      ],
+      "settings": {
+        "title": "Kits de Performance",
+        "subtitle": "Praticidade e economia para o seu treino."
+      }
     },
     "collection-banners": {
       "type": "collection-banners",
       "blocks": {
-        "banner-1": { "type": "banner", "settings": { "kicker": "Compressão 2 em 1", "title": "Aerofit", "cta_label": "Comprar Agora" } },
-        "banner-2": { "type": "banner", "settings": { "kicker": "06.2026", "title": "Essential", "cta_label": "Comprar Agora" } },
-        "banner-3": { "type": "banner", "settings": { "kicker": "Blindagem em movimento.", "title": "Inverno", "cta_label": "Comprar Agora" } }
+        "banner-1": {
+          "type": "banner",
+          "settings": {
+            "kicker": "Compressão 2 em 1",
+            "title": "Aerofit",
+            "cta_label": "Comprar Agora",
+            "url": ""
+          }
+        },
+        "banner-2": {
+          "type": "banner",
+          "settings": {
+            "kicker": "06.2026",
+            "title": "Essential",
+            "cta_label": "Comprar Agora",
+            "url": ""
+          }
+        },
+        "banner-3": {
+          "type": "banner",
+          "settings": {
+            "kicker": "Blindagem em movimento.",
+            "title": "Inverno",
+            "cta_label": "Comprar Agora",
+            "url": ""
+          }
+        }
       },
-      "block_order": ["banner-1","banner-2","banner-3"]
+      "block_order": [
+        "banner-1",
+        "banner-2",
+        "banner-3"
+      ],
+      "settings": {}
     },
     "mini-categories": {
       "type": "mini-categories",
       "blocks": {
-        "mc-1": { "type": "category", "settings": { "label": "Bonés" } },
-        "mc-2": { "type": "category", "settings": { "label": "Acessórios" } },
-        "mc-3": { "type": "category", "settings": { "label": "Cuecas" } },
-        "mc-4": { "type": "category", "settings": { "label": "Calças" } },
-        "mc-5": { "type": "category", "settings": { "label": "Casacos" } },
-        "mc-6": { "type": "category", "settings": { "label": "Meias" } },
-        "mc-7": { "type": "category", "settings": { "label": "Garrafas" } }
+        "mc-1": {
+          "type": "category",
+          "settings": {
+            "label": "Bonés",
+            "url": ""
+          }
+        },
+        "mc-2": {
+          "type": "category",
+          "settings": {
+            "label": "Acessórios",
+            "url": ""
+          }
+        },
+        "mc-3": {
+          "type": "category",
+          "settings": {
+            "label": "Cuecas",
+            "url": ""
+          }
+        },
+        "mc-4": {
+          "type": "category",
+          "settings": {
+            "label": "Calças",
+            "url": ""
+          }
+        },
+        "mc-5": {
+          "type": "category",
+          "settings": {
+            "label": "Casacos",
+            "url": ""
+          }
+        },
+        "mc-6": {
+          "type": "category",
+          "settings": {
+            "label": "Meias",
+            "url": ""
+          }
+        },
+        "mc-7": {
+          "type": "category",
+          "settings": {
+            "label": "Garrafas",
+            "url": ""
+          }
+        }
       },
-      "block_order": ["mc-1","mc-2","mc-3","mc-4","mc-5","mc-6","mc-7"]
+      "block_order": [
+        "mc-1",
+        "mc-2",
+        "mc-3",
+        "mc-4",
+        "mc-5",
+        "mc-6",
+        "mc-7"
+      ],
+      "settings": {
+        "title": "+ Categorias",
+        "subtitle": "A tecnologia certa para o seu objetivo."
+      }
     },
     "featured-products": {
       "type": "featured-products",
       "settings": {
-        "products_limit": 8
+        "collection_handle": "",
+        "products_limit": 8,
+        "see_all_url": ""
       }
     }
   },
