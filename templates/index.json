@@ -234,6 +234,7 @@
         "mc-1": {
           "type": "category",
           "settings": {
+            "image": "shopify://shop_images/banner-com-uma-pessoa-atleta-sem-frases.png",
             "label": "Bonés",
             "url": ""
           }
@@ -241,6 +242,7 @@
         "mc-2": {
           "type": "category",
           "settings": {
+            "image": "shopify://shop_images/mulher-atleta-banner-sem-frases.png",
             "label": "Acessórios",
             "url": ""
           }
@@ -248,6 +250,7 @@
         "mc-3": {
           "type": "category",
           "settings": {
+            "image": "shopify://shop_images/capa-de-categoria-aerofit-sem-frases.png",
             "label": "Cuecas",
             "url": ""
           }
@@ -255,6 +258,7 @@
         "mc-4": {
           "type": "category",
           "settings": {
+            "image": "shopify://shop_images/foto-banner-cal-as-esporte-sem-frases-dark.png",
             "label": "Calças",
             "url": ""
           }
@@ -262,6 +266,7 @@
         "mc-5": {
           "type": "category",
           "settings": {
+            "image": "shopify://shop_images/casacos-banner-sem-frase-dark.png",
             "label": "Casacos",
             "url": ""
           }
@@ -269,6 +274,7 @@
         "mc-6": {
           "type": "category",
           "settings": {
+            "image": "shopify://shop_images/meias-banner-sem-frase-dark.png",
             "label": "Meias",
             "url": ""
           }
@@ -276,6 +282,7 @@
         "mc-7": {
           "type": "category",
           "settings": {
+            "image": "shopify://shop_images/garrafas-banner-sem-frase-dark.png",
             "label": "Garrafas",
             "url": ""
           }
