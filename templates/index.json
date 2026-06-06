@@ -12,33 +12,32 @@
     "hero-banner": {
       "type": "hero-banner",
       "blocks": {
-        "slide_hAkAe8": {
+        "slide_NKpJyw": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/banner_alpha_1.png",
-            "mobile_image": "shopify://shop_images/windows-11-dark-3840x2160-20664.jpg",
-            "eyebrow": "SELEÇÃO",
+            "image": "shopify://shop_images/mulher-atleta-banner-sem-frases.png",
+            "eyebrow": "SELECAO",
             "heading": "OVER",
-            "subheading": "Edição Limitada",
+            "subheading": "Edicao Limitada",
             "cta_label": "Comprar Agora",
             "cta_url": ""
           }
         },
-        "slide_wwfc4C": {
+        "slide_wrTjta": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/banner_alpha_2.png",
-            "eyebrow": "SELEÇÃO",
-            "heading": "OVERTOP",
-            "subheading": "Edição Limitada",
-            "cta_label": "Comprar agora",
+            "image": "shopify://shop_images/banner-com-uma-pessoa-atleta-sem-frases.png",
+            "eyebrow": "SELECAO",
+            "heading": "OVER",
+            "subheading": "Edicao Limitada",
+            "cta_label": "Comprar Agora",
             "cta_url": ""
           }
         }
       },
       "block_order": [
-        "slide_hAkAe8",
-        "slide_wwfc4C"
+        "slide_NKpJyw",
+        "slide_wrTjta"
       ],
       "settings": {}
     },
