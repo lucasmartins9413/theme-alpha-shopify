@@ -193,28 +193,31 @@
         "banner-1": {
           "type": "banner",
           "settings": {
+            "image": "shopify://shop_images/capa-de-categoria-aerofit-sem-frases.png",
             "kicker": "Compressão 2 em 1",
             "title": "Aerofit",
             "cta_label": "Comprar Agora",
-            "url": ""
+            "url": "shopify://collections/frontpage"
           }
         },
         "banner-2": {
           "type": "banner",
           "settings": {
+            "image": "shopify://shop_images/banner-com-uma-pessoa-atleta-sem-frases.png",
             "kicker": "06.2026",
             "title": "Essential",
             "cta_label": "Comprar Agora",
-            "url": ""
+            "url": "shopify://collections/frontpage"
           }
         },
         "banner-3": {
           "type": "banner",
           "settings": {
+            "image": "shopify://shop_images/mulher-atleta-banner-sem-frases.png",
             "kicker": "Blindagem em movimento.",
             "title": "Inverno",
             "cta_label": "Comprar Agora",
-            "url": ""
+            "url": "shopify://collections/frontpage"
           }
         }
       },
