@@ -68,6 +68,54 @@
       {%- endfor -%}
     </div>
 
+    {%- comment -%} ---- Bundle suggestions ---- {%- endcomment -%}
+    {%- assign _cart_handles = '' -%}
+    {%- for item in cart.items -%}
+      {%- assign _cart_handles = _cart_handles | append: item.product.handle | append: ',' -%}
+    {%- endfor -%}
+
+    {%- capture _sugg_cards -%}
+      {%- assign _seen = _cart_handles -%}
+      {%- assign _count = 0 -%}
+      {%- for item in cart.items -%}
+        {%- assign _refs = item.product.metafields.custom.bundle_products.value -%}
+        {%- if _refs != blank -%}
+          {%- for bp in _refs -%}
+            {%- if _count >= 4 -%}{%- break -%}{%- endif -%}
+            {%- unless _seen contains bp.handle -%}
+              {%- assign _seen = _seen | append: bp.handle | append: ',' -%}
+              {%- assign _count = _count | plus: 1 -%}
+              {%- assign _bv = bp.selected_or_first_available_variant -%}
+              <div class="cdbundle-item">
+                <div class="cdbundle-img">
+                  {%- if bp.featured_image -%}
+                    {{ bp.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', alt: bp.title }}
+                  {%- endif -%}
+                </div>
+                <p class="cdbundle-name">{{ bp.title | truncate: 30 }}</p>
+                <p class="cdbundle-price">{{ _bv.price | money }}</p>
+                <button
+                  type="button"
+                  class="cdbundle-add"
+                  data-add-to-cart
+                  data-variant-id="{{ _bv.id }}"
+                  aria-label="Adicionar {{ bp.title }}">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+            {%- endunless -%}
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+
+    {%- unless _sugg_cards == blank -%}
+      <div class="cdbundle">
+        <p class="cdbundle-title">Adicione também</p>
+        <div class="cdbundle-list">{{ _sugg_cards }}</div>
+      </div>
+    {%- endunless -%}
+
     <div class="cdrawer-foot">
       <div class="cdrawer-subtotal">
         <span>Subtotal</span>

@@ -1,14 +1,39 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
+    "banners": {
+      "type": "collection-banners",
+      "blocks": {
+        "b1": {
+          "type": "banner",
+          "settings": {
+            "kicker": "Compressão 2 em 1",
+            "title": "Aerofit",
+            "cta_label": "Comprar Agora",
+            "url": ""
+          }
+        },
+        "b2": {
+          "type": "banner",
+          "settings": {
+            "kicker": "06.2026",
+            "title": "Essential",
+            "cta_label": "Comprar Agora",
+            "url": ""
+          }
+        },
+        "b3": {
+          "type": "banner",
+          "settings": {
+            "kicker": "Blindagem em movimento.",
+            "title": "Inverno",
+            "cta_label": "Comprar Agora",
+            "url": ""
+          }
+        }
+      },
+      "block_order": ["b1", "b2", "b3"],
+      "settings": {}
+    },
     "main": {
       "type": "main-list-collections",
       "settings": {
@@ -17,7 +42,24 @@
         "columns": "3",
         "cols_per_page": 18
       }
+    },
+    "mini": {
+      "type": "mini-categories",
+      "blocks": {
+        "c1": { "type": "category", "settings": { "label": "Bonés",      "url": "" } },
+        "c2": { "type": "category", "settings": { "label": "Acessórios", "url": "" } },
+        "c3": { "type": "category", "settings": { "label": "Cuecas",     "url": "" } },
+        "c4": { "type": "category", "settings": { "label": "Calças",     "url": "" } },
+        "c5": { "type": "category", "settings": { "label": "Casacos",    "url": "" } },
+        "c6": { "type": "category", "settings": { "label": "Meias",      "url": "" } },
+        "c7": { "type": "category", "settings": { "label": "Garrafas",   "url": "" } }
+      },
+      "block_order": ["c1", "c2", "c3", "c4", "c5", "c6", "c7"],
+      "settings": {
+        "title": "+ Categorias",
+        "subtitle": "A tecnologia certa para o seu objetivo."
+      }
     }
   },
-  "order": ["main"]
+  "order": ["banners", "main", "mini"]
 }

@@ -56,24 +56,55 @@
     </aside>
 
     <main>
+      {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+      {%- assign sort_options = 'manual|Relevância,best-selling|Mais vendidos,price-ascending|Menor preço,price-descending|Maior preço,created-descending|Mais novos,title-ascending|A – Z' | split: ',' -%}
+      {%- assign sort_label = 'Relevância' -%}
+      {%- for opt in sort_options -%}
+        {%- assign opt_parts = opt | split: '|' -%}
+        {%- if opt_parts[0] == sort_by -%}
+          {%- assign sort_label = opt_parts[1] -%}
+        {%- endif -%}
+      {%- endfor -%}
+
       <div class="toolbar">
         <div class="activechips">
           {%- for tag in current_tags -%}
             <span class="achip">
               {{ tag }}
-              <button aria-label="Remover">✕</button>
+              <button aria-label="Remover filtro {{ tag }}">✕</button>
             </span>
           {%- endfor -%}
         </div>
-        <div class="sortwrap">
-          <button class="sortbtn">
-            Ordenar: Relevância
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg>
-          </button>
+
+        <div class="toolbar-right">
+          <div class="view-toggle" id="viewToggle">
+            <button class="view-btn" data-view="grid" aria-label="Visualização em grade">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            </button>
+            <button class="view-btn" data-view="list" aria-label="Visualização em lista">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg>
+            </button>
+          </div>
+
+          <div class="sortwrap">
+            <button class="sortbtn" id="colSortBtn">
+              {{ sort_label }}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="sort-dropdown" id="colSortDropdown" hidden>
+              {%- for opt in sort_options -%}
+                {%- assign opt_parts = opt | split: '|' -%}
+                <a href="{{ collection.url }}?sort_by={{ opt_parts[0] }}"
+                   class="sort-opt{% if opt_parts[0] == sort_by %} is-active{% endif %}">
+                  {{ opt_parts[1] }}
+                </a>
+              {%- endfor -%}
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="product-grid">
+      <div class="product-grid" id="productGrid">
         {%- paginate collection.products by section.settings.products_per_page -%}
           {%- for product in collection.products -%}
             {%- render 'product-card', product: product -%}
@@ -95,6 +126,48 @@
     </main>
   </div>
 </div>
+
+<script>
+(function () {
+  /* ---- Sort dropdown ---- */
+  var sortBtn = document.getElementById('colSortBtn');
+  var sortDrop = document.getElementById('colSortDropdown');
+  if (sortBtn && sortDrop) {
+    sortBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = !sortDrop.hidden;
+      sortDrop.hidden = open;
+      sortBtn.classList.toggle('is-open', !open);
+    });
+    document.addEventListener('click', function () {
+      sortDrop.hidden = true;
+      sortBtn.classList.remove('is-open');
+    });
+  }
+
+  /* ---- View toggle (grid / list) ---- */
+  var grid    = document.getElementById('productGrid');
+  var toggle  = document.getElementById('viewToggle');
+  var STORAGE = 'alpha-col-view';
+
+  function applyView(view) {
+    if (!grid) return;
+    grid.classList.toggle('product-grid--list', view === 'list');
+    toggle?.querySelectorAll('.view-btn').forEach(function (b) {
+      b.classList.toggle('is-active', b.dataset.view === view);
+    });
+    try { localStorage.setItem(STORAGE, view); } catch (_) {}
+  }
+
+  var saved = 'grid';
+  try { saved = localStorage.getItem(STORAGE) || 'grid'; } catch (_) {}
+  applyView(saved);
+
+  toggle?.querySelectorAll('.view-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () { applyView(btn.dataset.view); });
+  });
+})();
+</script>
 
 {% schema %}
 {

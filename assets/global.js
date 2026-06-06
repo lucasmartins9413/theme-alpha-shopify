@@ -51,6 +51,49 @@ function animateCartBadge() {
   });
 }
 
+/* ---- Fly-to-cart animation ---- */
+function flyToCart(triggerBtn) {
+  const img = triggerBtn.closest('.pcard')?.querySelector('img');
+  const cartIcon = document.querySelector('[data-open-cart]');
+  if (!img || !cartIcon) return;
+
+  const from = img.getBoundingClientRect();
+  const to   = cartIcon.getBoundingClientRect();
+
+  const clone = document.createElement('img');
+  clone.src = img.currentSrc || img.src;
+  Object.assign(clone.style, {
+    position: 'fixed', zIndex: '9999', pointerEvents: 'none',
+    objectFit: 'cover', borderRadius: '8px', margin: '0',
+    width:  from.width  + 'px',
+    height: from.height + 'px',
+    top:    from.top    + 'px',
+    left:   from.left   + 'px',
+  });
+  document.body.appendChild(clone);
+
+  clone.getBoundingClientRect(); // force reflow
+
+  Object.assign(clone.style, {
+    transition: [
+      'top .7s cubic-bezier(.3,0,.7,1)',
+      'left .7s cubic-bezier(.3,0,.7,1)',
+      'width .7s ease-in',
+      'height .7s ease-in',
+      'opacity .6s .1s ease-in',
+      'border-radius .7s ease',
+    ].join(','),
+    top:          (to.top  + to.height / 2) + 'px',
+    left:         (to.left + to.width  / 2) + 'px',
+    width:        '0px',
+    height:       '0px',
+    opacity:      '0',
+    borderRadius: '50%',
+  });
+
+  clone.addEventListener('transitionend', () => clone.remove(), { once: true });
+}
+
 /* ---- Add to cart buttons (product cards) ---- */
 document.addEventListener('click', async e => {
   const btn = e.target.closest('[data-add-to-cart]');
@@ -58,6 +101,9 @@ document.addEventListener('click', async e => {
   e.preventDefault();
   const variantId = btn.dataset.variantId;
   if (!variantId) return;
+
+  flyToCart(btn);
+
   btn.disabled = true;
   try {
     await AlphaCart.add(variantId, 1);
@@ -116,6 +162,7 @@ sizeBtns.forEach(s => s.addEventListener('click', () => {
 }));
 
 document.querySelectorAll('.thumb').forEach(t => t.addEventListener('click', () => {
+  if (document.getElementById('ProductMainImage')) return; // PDP handles its own gallery
   document.querySelectorAll('.thumb').forEach(x => x.classList.remove('on'));
   t.classList.add('on');
   const mainImg = document.querySelector('.stage img');

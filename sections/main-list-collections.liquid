@@ -89,9 +89,11 @@
     {%- assign cols_per_page = section.settings.cols_per_page -%}
     {%- paginate collections by cols_per_page -%}
 
-      <div class="collections-grid cols-{{ section.settings.columns }}" id="colsGrid">
+      {%- assign rendered_count = 0 -%}
+      {%- capture col_cards -%}
         {%- for col in collections -%}
           {%- unless col.handle == 'frontpage' -%}
+            {%- assign rendered_count = rendered_count | plus: 1 -%}
             <a class="colcard" href="{{ col.url }}">
               <div class="colcard-img">
                 {%- assign _col_img = col.image | default: col.products.first.featured_image -%}
@@ -112,7 +114,19 @@
             </a>
           {%- endunless -%}
         {%- endfor -%}
-      </div>
+      {%- endcapture -%}
+
+      {%- if col_cards == blank -%}
+        <div class="colpage-empty">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="8" y="16" width="48" height="38" rx="4"/><path d="M22 16v-5a10 10 0 0 1 20 0v5"/></svg>
+          <p>Nenhuma coleção cadastrada ainda.</p>
+          <a href="/admin/collections" class="btn-ghost">Criar coleção no Admin</a>
+        </div>
+      {%- else -%}
+        <div class="collections-grid cols-{{ section.settings.columns }}" id="colsGrid">
+          {{ col_cards }}
+        </div>
+      {%- endif -%}
 
       {%- if paginate.pages > 1 -%}
         <div class="loadmore">

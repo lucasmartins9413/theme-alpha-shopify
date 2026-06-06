@@ -1,0 +1,119 @@
+{%- comment -%}
+  Compre Junto — renderiza abaixo do PDPblock.
+  Requer: metafield custom.bundle_products (list.product_reference)
+{%- endcomment -%}
+
+{%- assign bundle_refs = product.metafields.custom.bundle_products.value -%}
+{%- if bundle_refs != blank -%}
+
+{%- comment -%} Monta array: produto atual + bundle_refs {%- endcomment -%}
+{%- assign bundle_all = bundle_refs | unshift: product -%}
+
+<section class="bundle">
+  <div class="bundle-head">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <span>Compre Junto</span>
+  </div>
+
+  <div class="bundle-row">
+    {%- for bp in bundle_all -%}
+      {%- unless bp == blank -%}
+        {%- assign bv = bp.selected_or_first_available_variant -%}
+
+        {%- unless forloop.first -%}
+          <span class="bundle-plus">+</span>
+        {%- endunless -%}
+
+        <div class="bundle-card {% if forloop.first %}bundle-card--main{% endif %}">
+          <div class="bundle-card-img">
+            {%- if bp.featured_image -%}
+              {{ bp.featured_image | image_url: width: 220 | image_tag: loading: 'lazy', alt: bp.title }}
+            {%- else -%}
+              {{ 'product-apparel-1' | placeholder_svg_tag }}
+            {%- endif -%}
+          </div>
+          <div class="bundle-card-body">
+            <label class="bundle-label">
+              <input
+                type="checkbox"
+                class="bundle-check"
+                data-price="{{ bv.price }}"
+                value="{{ bv.id }}"
+                {% if forloop.first %}disabled checked{% else %}checked{% endif %}>
+              <span class="bundle-custom-check">
+                <svg viewBox="0 0 10 8" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4l3 3 5-6"/></svg>
+              </span>
+              <div class="bundle-card-info">
+                <p class="bundle-card-name">{{ bp.title | truncate: 45 }}</p>
+                <p class="bundle-card-price">{{ bv.price | money }}</p>
+              </div>
+            </label>
+          </div>
+          {%- if forloop.first -%}
+            <span class="bundle-this-tag">Este produto</span>
+          {%- endif -%}
+        </div>
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+
+  <div class="bundle-footer">
+    <div class="bundle-total-block">
+      <p class="bundle-total-label">Total do conjunto</p>
+      <p class="bundle-total" id="bundleTotal">—</p>
+    </div>
+    <button type="button" class="btn-solid bundle-cta" id="bundleBuyBtn">
+      Comprar tudo junto
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+</section>
+
+<script>
+(function () {
+  const section = document.querySelector('.bundle');
+  if (!section) return;
+
+  const totalEl = section.querySelector('#bundleTotal');
+  const buyBtn  = section.querySelector('#bundleBuyBtn');
+  const checks  = section.querySelectorAll('.bundle-check');
+
+  function calcTotal() {
+    let sum = 0;
+    checks.forEach(c => { if (c.checked) sum += Number(c.dataset.price) || 0; });
+    return sum;
+  }
+
+  function updateUI() {
+    const sum = calcTotal();
+    totalEl.textContent = (sum / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    buyBtn.disabled = sum === 0;
+  }
+
+  checks.forEach(c => c.addEventListener('change', updateUI));
+  updateUI();
+
+  buyBtn.addEventListener('click', async () => {
+    const items = [...checks]
+      .filter(c => c.checked)
+      .map(c => ({ id: Number(c.value), quantity: 1 }));
+    if (!items.length) return;
+
+    buyBtn.disabled = true;
+    try {
+      await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items })
+      });
+      await AlphaCartDrawer.refresh();
+      AlphaCartDrawer.open();
+      animateCartBadge();
+    } finally {
+      buyBtn.disabled = false;
+    }
+  });
+})();
+</script>
+
+{%- endif -%}

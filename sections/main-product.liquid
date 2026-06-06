@@ -30,12 +30,30 @@
         {{ 'product-apparel-1' | placeholder_svg_tag }}
       {%- endif -%}
 
+      <div class="stage-zoom" id="stageZoom"></div>
+
       <button class="gnav l" id="prevImg">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>
       </button>
       <button class="gnav r" id="nextImg">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
       </button>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="pdpLightbox" class="pdp-lightbox" aria-modal="true" role="dialog" aria-hidden="true">
+      <button class="pdp-lb-close" id="pdpLbClose" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="pdp-lb-nav l" id="pdpLbPrev">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 6-6 6 6 6"/></svg>
+      </div>
+      <div class="pdp-lb-inner">
+        <img id="pdpLbImg" src="" alt="{{ product.title }}">
+      </div>
+      <div class="pdp-lb-nav r" id="pdpLbNext">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+      </div>
     </div>
 
     <!-- Info panel -->
@@ -191,6 +209,9 @@
     </div>
   </div>
 
+  <!-- Compre Junto -->
+  {%- render 'bundle' -%}
+
   <!-- Related products -->
   {%- if section.settings.show_related -%}
     {%- assign related_collection = collections[product.collections.first.handle] -%}
@@ -229,18 +250,128 @@
       "{{ media | image_url: width: 900 }}"{% unless forloop.last %},{% endunless %}
     {%- endfor -%}
   ];
+  const mediaUrlsHD = [
+    {%- for media in product.media -%}
+      "{{ media | image_url: width: 2200 }}"{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ];
+
   let imgIdx = 0;
-  const mainImg = document.getElementById('ProductMainImage');
-  function showImg(i){
-    imgIdx = (i + mediaUrls.length) % mediaUrls.length;
-    if(mainImg) mainImg.src = mediaUrls[imgIdx];
-    document.querySelectorAll('.thumb').forEach((t,j) => t.classList.toggle('on', j === imgIdx));
+  const mainImg  = document.getElementById('ProductMainImage');
+  const stageZoom = document.getElementById('stageZoom');
+  const stage    = mainImg?.closest('.stage');
+
+  /* ---- Troca de imagem ---- */
+  function showImg(i, instant) {
+    imgIdx = ((i % mediaUrls.length) + mediaUrls.length) % mediaUrls.length;
+    const url   = mediaUrls[imgIdx];
+    const urlHD = mediaUrlsHD[imgIdx];
+
+    document.querySelectorAll('.pdp .thumb').forEach((t, j) =>
+      t.classList.toggle('on', j === imgIdx)
+    );
+    if (stageZoom && urlHD) stageZoom.style.backgroundImage = `url('${urlHD}')`;
+    if (!mainImg || !url) return;
+
+    if (instant) { mainImg.src = url; return; }
+
+    mainImg.style.opacity = '0';
+    setTimeout(() => {
+      mainImg.src = url;
+      mainImg.style.opacity = '1';
+    }, 200);
   }
+
   document.getElementById('prevImg')?.addEventListener('click', () => showImg(imgIdx - 1));
   document.getElementById('nextImg')?.addEventListener('click', () => showImg(imgIdx + 1));
-  document.querySelectorAll('.thumb').forEach((t, i) => t.addEventListener('click', () => showImg(i)));
+
+  /* Garante que apenas os thumbs desta galeria são selecionados */
+  document.querySelectorAll('.pdp .thumbs .thumb').forEach((t, i) => {
+    t.addEventListener('click', () => showImg(i));
+  });
+
+  /* ---- Hover zoom ---- */
+  if (stage && stageZoom && mediaUrlsHD.length) {
+    stageZoom.style.backgroundImage = `url('${mediaUrlsHD[0]}')`;
+
+    stage.addEventListener('mouseenter', () => { stageZoom.classList.add('active'); });
+    stage.addEventListener('mouseleave', () => { stageZoom.classList.remove('active'); });
+    stage.addEventListener('mousemove', e => {
+      const r = stage.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width  * 100).toFixed(2);
+      const y = ((e.clientY - r.top)  / r.height * 100).toFixed(2);
+      stageZoom.style.backgroundPosition = `${x}% ${y}%`;
+    });
+  }
+
+  /* ---- Lightbox ---- */
+  const lb      = document.getElementById('pdpLightbox');
+  const lbImg   = document.getElementById('pdpLbImg');
+
+  function openLb() {
+    if (!lb || !lbImg) return;
+    lbImg.src = mediaUrlsHD[imgIdx] || mediaUrls[imgIdx];
+    lb.classList.add('is-open');
+    lb.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('no-scroll');
+  }
+  function closeLb() {
+    lb?.classList.remove('is-open');
+    lb?.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('no-scroll');
+  }
+  function lbNav(dir) {
+    showImg(imgIdx + dir, true);
+    if (lbImg) lbImg.src = mediaUrlsHD[imgIdx] || mediaUrls[imgIdx];
+  }
+
+  stage?.addEventListener('click', e => {
+    if (e.target.closest('.gnav')) return;
+    openLb();
+  });
+
+  document.getElementById('pdpLbClose')?.addEventListener('click', closeLb);
+  document.getElementById('pdpLbPrev')?.addEventListener('click', () => lbNav(-1));
+  document.getElementById('pdpLbNext')?.addEventListener('click', () => lbNav(1));
+  lb?.addEventListener('click', e => { if (!e.target.closest('.pdp-lb-inner, .pdp-lb-nav, .pdp-lb-close')) closeLb(); });
+
+  document.addEventListener('keydown', e => {
+    if (!lb?.classList.contains('is-open')) return;
+    if (e.key === 'Escape')     closeLb();
+    if (e.key === 'ArrowRight') lbNav(1);
+    if (e.key === 'ArrowLeft')  lbNav(-1);
+  });
 })();
+
+/* ---- PDP: intercept form → AJAX + open mini cart ---- */
+document.getElementById('ProductForm')?.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const variantId = document.getElementById('VariantId')?.value;
+  const quantity  = parseInt(document.getElementById('qv')?.textContent) || 1;
+  if (!variantId) return;
+
+  const btn = this.querySelector('[name="add"]');
+  const original = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<svg style="width:18px;height:18px;animation:spin .7s linear infinite" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>';
+
+  try {
+    await AlphaCart.add(variantId, quantity);
+    await AlphaCartDrawer.refresh();
+    AlphaCartDrawer.open();
+    animateCartBadge();
+  } catch(err) {
+    alert('Não foi possível adicionar o produto. Tente novamente.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = original;
+  }
+});
 </script>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
 
 {% schema %}
 {
