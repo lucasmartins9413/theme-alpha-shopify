@@ -45,6 +45,51 @@
           "tiktok": "",
           "youtube": ""
         }
+      },
+      "newsletter": {
+        "type": "newsletter",
+        "settings": {
+          "enabled": true,
+          "heading": "Fique por dentro",
+          "subheading": "Cadastre seu e-mail e receba novidades, lançamentos e ofertas exclusivas."
+        }
+      },
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {}
+      },
+      "newsletter-popup": {
+        "type": "newsletter-popup",
+        "settings": {
+          "enabled": true,
+          "delay_seconds": 5,
+          "image": "shopify://shop_images/banner_alpha_1.png",
+          "discount_text": "GANHE 10% OFF",
+          "heading": "Fique por dentro",
+          "subheading": "Cadastre seu e-mail e receba novidades, lançamentos e ofertas exclusivas."
+        }
+      },
+      "promo-popup": {
+        "type": "promo-popup",
+        "settings": {
+          "enabled": true,
+          "delay_seconds": 3,
+          "image": "shopify://shop_images/mulher-atleta-banner-sem-frases.png",
+          "heading": "Copa 2026 chegou",
+          "subheading": "Coleção especial com 10% de cashback em todas as compras.",
+          "button_label": "Ver coleção",
+          "button_url": ""
+        }
+      },
+      "exit-popup": {
+        "type": "exit-popup",
+        "settings": {
+          "enabled": true,
+          "eyebrow": "ESPERA!",
+          "heading": "Não vá embora de mãos vazias",
+          "subheading": "Cadastre seu e-mail e ganhe um cupom exclusivo pra primeira compra.",
+          "discount_code": "BEMVINDO10"
+        }
       }
     },
     "content_for_index": []
