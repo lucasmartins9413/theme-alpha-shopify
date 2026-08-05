@@ -16,7 +16,7 @@
 
   <div class="scroller" id="catScroll">
     {%- for block in section.blocks -%}
-      <a class="catcard" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>
+      <a class="catcard" href="{{ block.settings.url }}" data-tab="{{ block.settings.tab | default: 'all' }}" {{ block.shopify_attributes }}>
         {%- render 'responsive-image',
           image: block.settings.image,
           mobile_image: block.settings.mobile_image,
@@ -77,6 +77,17 @@
           "id": "kicker",
           "label": "Rótulo pequeno",
           "default": "Essential Dry Fit"
+        },
+        {
+          "type": "select",
+          "id": "tab",
+          "label": "Aparece na aba",
+          "options": [
+            { "value": "all", "label": "Ambas" },
+            { "value": "m", "label": "Aba 1 (ex: Masculino)" },
+            { "value": "f", "label": "Aba 2 (ex: Feminino)" }
+          ],
+          "default": "all"
         },
         {
           "type": "text",

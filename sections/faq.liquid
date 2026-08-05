@@ -1,0 +1,95 @@
+<section class="sec faq-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="titles">
+        <h2>{{ section.settings.heading }}</h2>
+        {%- if section.settings.subheading != blank -%}
+          <p>{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="acc">
+      {%- for block in section.blocks -%}
+        <div class="item{% if forloop.first %} open{% endif %}" {{ block.shopify_attributes }}>
+          <div class="head">
+            {{ block.settings.question }}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </div>
+          <div class="body">{{ block.settings.answer }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{%- if section.blocks.size > 0 -%}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {%- for block in section.blocks -%}
+        {
+          "@type": "Question",
+          "name": {{ block.settings.question | json }},
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": {{ block.settings.answer | strip_html | json }}
+          }
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  }
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Perguntas frequentes",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Perguntas frequentes"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtítulo"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Pergunta",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Pergunta",
+          "default": "Qual o prazo de entrega?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Resposta",
+          "default": "<p>Envio em até 48h. Frete grátis para compras acima de R$ 199.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Perguntas frequentes",
+      "blocks": [
+        { "type": "question" },
+        { "type": "question" },
+        { "type": "question" }
+      ]
+    }
+  ],
+  "max_blocks": 20
+}
+{% endschema %}

@@ -1,0 +1,64 @@
+{%- if section.settings.enabled -%}
+  <div class="popup popup--exit" id="ExitPopup" role="dialog" aria-modal="true" aria-hidden="true">
+    <button type="button" class="popup-close" data-popup-close aria-label="{{ 'general.close' | t }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div class="popup-body">
+      <span class="popup-tag popup-tag--red">{{ section.settings.eyebrow }}</span>
+      <h3>{{ section.settings.heading }}</h3>
+      <p>{{ section.settings.subheading }}</p>
+
+      {%- if section.settings.discount_code != blank -%}
+        <button type="button" class="popup-code" data-copy-code="{{ section.settings.discount_code }}">
+          {{ section.settings.discount_code }}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>
+        </button>
+      {%- endif -%}
+
+      <form class="popup-form">
+        <input type="email" placeholder="{{ 'newsletter.email_placeholder' | t }}" required>
+        <button type="submit" class="btn-solid">{{ 'newsletter.submit' | t }}</button>
+      </form>
+      <p class="popup-success" hidden>{{ 'newsletter.success' | t }}</p>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Popup — Saída",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Ativar popup",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Selo de destaque",
+      "default": "ESPERA!"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Não vá embora de mãos vazias"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "Cadastre seu e-mail e ganhe um cupom exclusivo pra primeira compra."
+    },
+    {
+      "type": "text",
+      "id": "discount_code",
+      "label": "Cupom de desconto (opcional)",
+      "default": "BEMVINDO10"
+    }
+  ]
+}
+{% endschema %}

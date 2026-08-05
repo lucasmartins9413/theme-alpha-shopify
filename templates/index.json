@@ -51,7 +51,8 @@
             "kicker": "Essential Dry Fit",
             "price_label": "A partir de",
             "price_from": "R$33,33",
-            "url": "shopify://collections"
+            "url": "shopify://collections",
+            "tab": "all"
           }
         },
         "cat-2": {
@@ -61,7 +62,8 @@
             "kicker": "Oversized",
             "price_label": "A partir de",
             "price_from": "R$39,99",
-            "url": ""
+            "url": "",
+            "tab": "m"
           }
         },
         "cat-3": {
@@ -71,7 +73,8 @@
             "kicker": "Bermudas/Shorts",
             "price_label": "A partir de",
             "price_from": "R$49,99",
-            "url": ""
+            "url": "",
+            "tab": "f"
           }
         },
         "cat-4": {
@@ -81,7 +84,8 @@
             "kicker": "Apex Pro",
             "price_label": "Sem Limites",
             "price_from": "A melhor do Brasil",
-            "url": ""
+            "url": "",
+            "tab": "m"
           }
         },
         "cat-5": {
@@ -91,7 +95,8 @@
             "kicker": "Thermaflow",
             "price_label": "Poliamida",
             "price_from": "A partir de R$62",
-            "url": ""
+            "url": "",
+            "tab": "f"
           }
         },
         "cat-6": {
@@ -100,7 +105,8 @@
             "kicker": "Regatas",
             "price_label": "A partir de",
             "price_from": "R$29,99",
-            "url": ""
+            "url": "",
+            "tab": "all"
           }
         }
       },

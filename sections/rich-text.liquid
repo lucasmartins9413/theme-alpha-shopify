@@ -1,0 +1,60 @@
+<section class="sec richtext-sec{% if section.settings.text_align == 'left' %} align-left{% endif %}">
+  <div class="wrap richtext-wrap">
+    {%- if section.settings.heading != blank -%}
+      <h2>{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="rte">{{ section.settings.text }}</div>
+    {%- endif -%}
+    {%- if section.settings.button_label != blank -%}
+      <a href="{{ section.settings.button_url | default: '#' }}" class="btn-solid">
+        {{ section.settings.button_label }}
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Texto rico",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Sobre a Alpha"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texto",
+      "default": "<p>Conte a história da sua marca aqui.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto do botão"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Link do botão"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Alinhamento",
+      "options": [
+        { "value": "center", "label": "Centro" },
+        { "value": "left", "label": "Esquerda" }
+      ],
+      "default": "center"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Texto rico"
+    }
+  ]
+}
+{% endschema %}

@@ -11,15 +11,85 @@
 
   {{ content_for_header }}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Saira+Condensed:wght@500;600;700;800;900&family=Saira:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  {%- if settings.favicon -%}
+    <link rel="icon" href="{{ settings.favicon | image_url: width: 32 }}">
+  {%- endif -%}
+
+  {%- assign _archivo_weights = '400,500,600,700,800,900' | split: ',' -%}
+  {%- assign _saira_weights = '400,500,600,700,800' | split: ',' -%}
+  {%- assign _saira_condensed_weights = '500,600,700,800,900' | split: ',' -%}
+  <style>
+    {%- for weight in _archivo_weights -%}
+    @font-face {
+      font-family: 'Archivo';
+      font-style: normal;
+      font-weight: {{ weight }};
+      font-display: swap;
+      src: url({{ 'archivo-variable.woff2' | asset_url }}) format('woff2');
+    }
+    {%- endfor -%}
+    {%- for weight in _saira_weights -%}
+    @font-face {
+      font-family: 'Saira';
+      font-style: normal;
+      font-weight: {{ weight }};
+      font-display: swap;
+      src: url({{ 'saira-variable.woff2' | asset_url }}) format('woff2');
+    }
+    {%- endfor -%}
+    {%- for weight in _saira_condensed_weights -%}
+    @font-face {
+      font-family: 'Saira Condensed';
+      font-style: normal;
+      font-weight: {{ weight }};
+      font-display: swap;
+      src: url({{ 'saira-condensed-' | append: weight | append: '.woff2' | asset_url }}) format('woff2');
+    }
+    {%- endfor -%}
+  </style>
 
   {{ 'base.css' | asset_url | stylesheet_tag }}
   <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+
+  <style>
+    :root {
+      --green: {{ settings.color_accent | default: '#5f9e2e' }};
+      --green-bright: {{ settings.color_accent_bright | default: '#6fb02f' }};
+      --red: {{ settings.color_promo | default: '#e21c1c' }};
+      --font-body: {{ settings.font_body | default: "'Archivo', system-ui, sans-serif" }};
+      --maxw: {{ settings.page_width | default: 1300 }}px;
+    }
+  </style>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": {{ shop.name | json }},
+      "url": {{ request.origin | append: routes.root_url | json }}
+      {%- if shop.email != blank -%},
+      "email": {{ shop.email | json }}
+      {%- endif -%}
+    }
+  </script>
+  {%- assign _search_target = request.origin | append: routes.search_url | append: '?q={search_term_string}' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "url": {{ request.origin | append: routes.root_url | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ _search_target | json }},
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
 </head>
 
 <body class="template-{{ template.name }}">
+  <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
   {%- section 'announcement-bar' -%}
   {%- section 'header' -%}
 
@@ -27,7 +97,13 @@
     {{ content_for_layout }}
   </main>
 
+  {%- section 'newsletter' -%}
   {%- section 'footer' -%}
   {%- section 'cart-drawer' -%}
+
+  <div class="popup-overlay" id="popupOverlay"></div>
+  {%- section 'newsletter-popup' -%}
+  {%- section 'promo-popup' -%}
+  {%- section 'exit-popup' -%}
 </body>
 </html>

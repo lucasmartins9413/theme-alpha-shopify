@@ -55,5 +55,40 @@
   },
   "accessibility": {
     "skip_to_content": "Ir para o conteúdo principal"
+  },
+  "newsletter": {
+    "heading": "Fique por dentro",
+    "subheading": "Cadastre seu e-mail e receba novidades, lançamentos e ofertas exclusivas.",
+    "email_placeholder": "Seu melhor e-mail",
+    "submit": "Cadastrar",
+    "success": "Cadastro realizado! Fique de olho no seu e-mail.",
+    "error": "Não foi possível cadastrar. Confira o e-mail e tente novamente."
+  },
+  "blog": {
+    "read_more": "Ler mais",
+    "by_author": "Por {{ author }}",
+    "reading_time": "{{ minutes }} min de leitura",
+    "all_posts": "Todos",
+    "related_articles": "Você também vai gostar",
+    "previous_article": "Anterior",
+    "next_article": "Próximo",
+    "share": "Compartilhar",
+    "copy_link": "Copiar link",
+    "link_copied": "Link copiado!",
+    "comments": {
+      "title": "Comentários",
+      "count": {
+        "one": "{{ count }} comentário",
+        "other": "{{ count }} comentários"
+      },
+      "empty": "Seja o primeiro a comentar.",
+      "name_label": "Nome",
+      "email_label": "E-mail",
+      "message_label": "Comentário",
+      "submit": "Publicar comentário",
+      "success_moderated": "Comentário enviado! Ele vai aparecer assim que for aprovado.",
+      "success": "Comentário publicado!",
+      "error": "Não foi possível publicar seu comentário. Confira os campos e tente novamente."
+    }
   }
 }

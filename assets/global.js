@@ -125,11 +125,21 @@ document.querySelectorAll('[data-scroll]').forEach(btn => {
   });
 });
 
-/* ---- Tab toggle ---- */
-document.querySelectorAll('.tabs button').forEach(b => {
-  b.addEventListener('click', () => {
-    b.closest('.tabs').querySelectorAll('button').forEach(x => x.classList.remove('on'));
-    b.classList.add('on');
+/* ---- Tab toggle (filtra itens com [data-tab] dentro da mesma seção) ---- */
+document.querySelectorAll('.tabs').forEach(tabs => {
+  const section = tabs.closest('section');
+  const items = section?.querySelectorAll('.scroller [data-tab]');
+
+  tabs.querySelectorAll('button[data-tab]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabs.querySelectorAll('button').forEach(x => x.classList.remove('on'));
+      btn.classList.add('on');
+
+      items?.forEach(item => {
+        const show = item.dataset.tab === 'all' || item.dataset.tab === btn.dataset.tab;
+        item.style.display = show ? '' : 'none';
+      });
+    });
   });
 });
 
@@ -322,6 +332,83 @@ const AlphaCartDrawer = {
     }).join('');
   }
 })();
+
+/* ---- Popups (newsletter / promoção / saída) ---- */
+const AlphaPopup = {
+  get overlay() { return document.getElementById('popupOverlay'); },
+
+  open(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    document.querySelectorAll('.popup.is-open').forEach(p => {
+      p.classList.remove('is-open');
+      p.setAttribute('aria-hidden', 'true');
+    });
+    el.classList.add('is-open');
+    el.setAttribute('aria-hidden', 'false');
+    this.overlay?.classList.add('is-open');
+    document.body.classList.add('no-scroll');
+  },
+
+  close() {
+    document.querySelectorAll('.popup.is-open').forEach(p => {
+      p.classList.remove('is-open');
+      p.setAttribute('aria-hidden', 'true');
+    });
+    this.overlay?.classList.remove('is-open');
+    document.body.classList.remove('no-scroll');
+  },
+
+  isOpen() { return !!document.querySelector('.popup.is-open'); }
+};
+
+document.querySelectorAll('.popup [data-popup-close]').forEach(btn => {
+  btn.addEventListener('click', () => AlphaPopup.close());
+});
+AlphaPopup.overlay?.addEventListener('click', () => AlphaPopup.close());
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && AlphaPopup.isOpen()) AlphaPopup.close();
+});
+
+/* Popups de carregamento (newsletter / promoção) — só um por sessão, quem disparar primeiro vence */
+document.querySelectorAll('.popup[data-popup-type="onload"]').forEach(popup => {
+  const delay = (parseInt(popup.dataset.delay, 10) || 5) * 1000;
+  setTimeout(() => {
+    if (sessionStorage.getItem('alpha-popup-shown') || AlphaPopup.isOpen()) return;
+    AlphaPopup.open(popup.id);
+    sessionStorage.setItem('alpha-popup-shown', '1');
+  }, delay);
+});
+
+/* Popup de saída (exit-intent — desktop: mouse sai por cima da viewport) */
+const exitPopup = document.getElementById('ExitPopup');
+if (exitPopup) {
+  document.addEventListener('mouseleave', e => {
+    if (e.clientY > 0) return;
+    if (sessionStorage.getItem('alpha-exit-popup-shown') || AlphaPopup.isOpen()) return;
+    AlphaPopup.open('ExitPopup');
+    sessionStorage.setItem('alpha-exit-popup-shown', '1');
+  });
+}
+
+/* Formulários estáticos dos popups — sem integração ainda, só feedback visual */
+document.querySelectorAll('.popup-form').forEach(form => {
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    form.hidden = true;
+    form.nextElementSibling?.removeAttribute('hidden');
+  });
+});
+
+/* Copiar cupom (popup de saída) */
+document.querySelectorAll('[data-copy-code]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    navigator.clipboard?.writeText(btn.dataset.copyCode);
+    const original = btn.innerHTML;
+    btn.innerHTML = 'Copiado!';
+    setTimeout(() => { btn.innerHTML = original; }, 1600);
+  });
+});
 
 /* ---- Init ---- */
 AlphaCartDrawer.init();

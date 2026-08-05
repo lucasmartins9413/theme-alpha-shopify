@@ -1,0 +1,73 @@
+{%- if section.settings.enabled -%}
+  <div class="popup" id="NewsletterPopup" data-popup-type="onload" data-delay="{{ section.settings.delay_seconds | default: 5 }}" role="dialog" aria-modal="true" aria-hidden="true">
+    <button type="button" class="popup-close" data-popup-close aria-label="{{ 'general.close' | t }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+
+    {%- if section.settings.image -%}
+      <div class="popup-img">
+        {{ section.settings.image | image_url: width: 500 | image_tag: loading: 'lazy', alt: section.settings.heading }}
+      </div>
+    {%- endif -%}
+
+    <div class="popup-body">
+      {%- if section.settings.discount_text != blank -%}
+        <span class="popup-tag">{{ section.settings.discount_text }}</span>
+      {%- endif -%}
+      <h3>{{ section.settings.heading }}</h3>
+      <p>{{ section.settings.subheading }}</p>
+
+      <form class="popup-form">
+        <input type="email" placeholder="{{ 'newsletter.email_placeholder' | t }}" required>
+        <button type="submit" class="btn-solid">{{ 'newsletter.submit' | t }}</button>
+      </form>
+      <p class="popup-success" hidden>{{ 'newsletter.success' | t }}</p>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Popup — Newsletter",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Ativar popup",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "delay_seconds",
+      "label": "Aparece após (segundos)",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagem (opcional)"
+    },
+    {
+      "type": "text",
+      "id": "discount_text",
+      "label": "Selo de destaque",
+      "default": "GANHE 10% OFF"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Fique por dentro"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "Cadastre seu e-mail e receba novidades, lançamentos e ofertas exclusivas."
+    }
+  ]
+}
+{% endschema %}

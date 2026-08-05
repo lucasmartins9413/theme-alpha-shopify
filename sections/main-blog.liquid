@@ -1,0 +1,60 @@
+<div class="pagehero">
+  <div class="wrap">
+    {%- render 'breadcrumb' -%}
+    <h1>{{ blog.title }}</h1>
+    <div class="count">{{ blog.articles_count }} publicações</div>
+
+    {%- if blog.all_tags.size > 0 -%}
+      <div class="quickrow">
+        <a href="{{ blog.url }}" class="qchip{% unless current_tags %} on{% endunless %}">{{ 'blog.all_posts' | t }}</a>
+        {%- for tag in blog.all_tags limit: 8 -%}
+          <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="qchip{% if current_tags contains tag %} on{% endif %}">{{ tag }}</a>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="product-grid" id="blogGrid">
+    {%- paginate blog.articles by section.settings.articles_per_page -%}
+      {%- for article in blog.articles -%}
+        {%- render 'article-card', article: article -%}
+      {%- endfor -%}
+    {%- endpaginate -%}
+  </div>
+
+  {%- if blog.articles_count > section.settings.articles_per_page -%}
+    <div class="loadmore">
+      <p>Você viu <b>{{ section.settings.articles_per_page }}</b> de {{ blog.articles_count }} publicações</p>
+      <div class="barwrap">
+        <i style="width:{{ section.settings.articles_per_page | times: 100 | divided_by: blog.articles_count }}%"></i>
+      </div>
+      {%- if paginate.next -%}
+        <a class="btn-ghost" href="{{ paginate.next.url }}">{{ 'collection.load_more' | t }}</a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Blog Principal",
+  "settings": [
+    {
+      "type": "range",
+      "id": "articles_per_page",
+      "min": 3,
+      "max": 24,
+      "step": 3,
+      "default": 9,
+      "label": "Publicações por página"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog Principal"
+    }
+  ]
+}
+{% endschema %}

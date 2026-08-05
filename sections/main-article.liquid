@@ -1,0 +1,211 @@
+{%- assign reading_words = article.content | strip_html | split: ' ' | size -%}
+{%- assign reading_minutes = reading_words | divided_by: 200 -%}
+{%- if reading_minutes < 1 -%}{%- assign reading_minutes = 1 -%}{%- endif -%}
+
+<div class="pagehero">
+  <div class="wrap">
+    {%- render 'breadcrumb' -%}
+    {%- if article.tags.size > 0 -%}
+      <div class="article-kicker">{{ article.tags.first }}</div>
+    {%- endif -%}
+    <h1>{{ article.title }}</h1>
+    <div class="article-meta">
+      <span>{{ 'blog.by_author' | t: author: article.author }}</span>
+      <span class="dot">•</span>
+      <span>{{ article.published_at | date: '%d de %B de %Y' }}</span>
+      <span class="dot">•</span>
+      <span>{{ 'blog.reading_time' | t: minutes: reading_minutes }}</span>
+    </div>
+  </div>
+</div>
+
+{%- if article.image -%}
+  <div class="article-hero-img">
+    {{ article.image | image_url: width: 1600 | image_tag: loading: 'eager', fetchpriority: 'high', alt: article.image.alt | default: article.title }}
+  </div>
+{%- endif -%}
+
+<div class="wrap">
+  <div class="article-wrap">
+    <div class="article-body">
+      {{ article.content }}
+    </div>
+
+    {%- if article.tags.size > 0 -%}
+      <div class="article-tags">
+        {%- for tag in article.tags -%}
+          <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="qchip">{{ tag }}</a>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="article-share">
+      <span>{{ 'blog.share' | t }}</span>
+      <a class="iconbtn" href="https://twitter.com/intent/tweet?url={{ article.url | prepend: request.origin | url_encode }}&text={{ article.title | url_encode }}" target="_blank" rel="noopener" aria-label="Compartilhar no X">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l16 16M20 4L4 20"/></svg>
+      </a>
+      <a class="iconbtn" href="https://www.facebook.com/sharer/sharer.php?u={{ article.url | prepend: request.origin | url_encode }}" target="_blank" rel="noopener" aria-label="Compartilhar no Facebook">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9V7c0-1 .5-1.5 1.5-1.5H17V2h-2.5C12 2 10.5 3.6 10.5 6v3H8v3.5h2.5V22H14v-9.5h2.6l.4-3.5z"/></svg>
+      </a>
+      <a class="iconbtn" href="https://api.whatsapp.com/send?text={{ article.title | url_encode }}%20{{ article.url | prepend: request.origin | url_encode }}" target="_blank" rel="noopener" aria-label="Compartilhar no WhatsApp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21l1.6-4.8A8.5 8.5 0 1 1 8 19.4z"/><path d="M8.5 9.5c0 3 2.5 5.5 5.5 5.5"/></svg>
+      </a>
+      <button type="button" class="iconbtn" id="articleCopyLink" data-url="{{ article.url | prepend: request.origin }}" aria-label="{{ 'blog.copy_link' | t }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>
+      </button>
+    </div>
+
+    {%- if article.previous_article or article.next_article -%}
+      <div class="article-nav">
+        {%- if article.previous_article -%}
+          <a href="{{ article.previous_article.url }}" class="article-nav-link prev">
+            <span class="lbl">← {{ 'blog.previous_article' | t }}</span>
+            <span class="ttl">{{ article.previous_article.title }}</span>
+          </a>
+        {%- else -%}
+          <span></span>
+        {%- endif -%}
+        {%- if article.next_article -%}
+          <a href="{{ article.next_article.url }}" class="article-nav-link next">
+            <span class="lbl">{{ 'blog.next_article' | t }} →</span>
+            <span class="ttl">{{ article.next_article.title }}</span>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_comments and blog.comments_enabled? -%}
+      <div class="comments">
+        <h2>{{ 'blog.comments.title' | t }}</h2>
+        <p class="comments-count">
+          {%- if article.comments_count > 0 -%}
+            {{ 'blog.comments.count' | t: count: article.comments_count }}
+          {%- else -%}
+            {{ 'blog.comments.empty' | t }}
+          {%- endif -%}
+        </p>
+
+        {%- if article.comments.size > 0 -%}
+          <div class="comment-list">
+            {%- for comment in article.comments -%}
+              <div class="comment-item">
+                <div class="comment-item-head">
+                  <span class="comment-author">{{ comment.author }}</span>
+                  <span class="comment-date">{{ comment.created_at | date: '%d/%m/%Y' }}</span>
+                </div>
+                <div class="comment-body">{{ comment.content }}</div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- form 'new_comment', article, id: 'CommentForm', class: 'comment-form' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="newsletter-msg success">
+              {%- if blog.moderated? -%}
+                {{ 'blog.comments.success_moderated' | t }}
+              {%- else -%}
+                {{ 'blog.comments.success' | t }}
+              {%- endif -%}
+            </p>
+          {%- else -%}
+            {%- if form.errors -%}
+              <p class="newsletter-msg error">{{ 'blog.comments.error' | t }}</p>
+            {%- endif -%}
+            <div class="comment-fields">
+              <input type="text" name="comment[author]" placeholder="{{ 'blog.comments.name_label' | t }}" value="{{ form.author }}" required>
+              <input type="email" name="comment[email]" placeholder="{{ 'blog.comments.email_label' | t }}" value="{{ form.email }}" required>
+            </div>
+            <textarea name="comment[body]" rows="4" placeholder="{{ 'blog.comments.message_label' | t }}" required>{{ form.body }}</textarea>
+            <button type="submit" class="btn-solid">{{ 'blog.comments.submit' | t }}</button>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- if section.settings.show_related -%}
+  {%- assign related_count = 0 -%}
+  {%- capture related_cards -%}
+    {%- for related in blog.articles -%}
+      {%- if related.id != article.id and related_count < 3 -%}
+        {%- assign related_count = related_count | plus: 1 -%}
+        {%- render 'article-card', article: related -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- unless related_cards == blank -%}
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="titles">
+            <h2>{{ 'blog.related_articles' | t }}</h2>
+          </div>
+        </div>
+        <div class="product-grid">{{ related_cards }}</div>
+      </div>
+    </section>
+  {%- endunless -%}
+{%- endif -%}
+
+{%- assign article_image_url = article.image | image_url: width: 1600 -%}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": {{ article.title | json }},
+    "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%S%z' | json }},
+    {%- if article.updated_at -%}
+    "dateModified": {{ article.updated_at | date: '%Y-%m-%dT%H:%M:%S%z' | json }},
+    {%- endif -%}
+    "author": {
+      "@type": "Person",
+      "name": {{ article.author | json }}
+    },
+    {%- if article_image_url -%}
+    "image": [{{ article_image_url | json }}],
+    {%- endif -%}
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": {{ article.url | prepend: request.origin | json }}
+    }
+  }
+</script>
+
+<script>
+  document.getElementById('articleCopyLink')?.addEventListener('click', function () {
+    var url = this.dataset.url;
+    var btn = this;
+    navigator.clipboard?.writeText(url).then(function () {
+      var original = btn.innerHTML;
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 5 5L20 7"/></svg>';
+      setTimeout(function () { btn.innerHTML = original; }, 1800);
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Artigo Principal",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_related",
+      "label": "Mostrar artigos relacionados",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_comments",
+      "label": "Mostrar comentários",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Artigo Principal"
+    }
+  ]
+}
+{% endschema %}

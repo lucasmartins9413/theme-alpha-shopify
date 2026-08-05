@@ -1,0 +1,68 @@
+# {{ agents.store_name }} — Referência completa para agentes
+
+A descrição canônica está em {{ agents.store_url }}/agents.md.
+
+## Sobre a loja
+
+A Alpha é uma marca brasileira de roupas e acessórios esportivos/fitness, focada em vestuário de treino de alta performance.
+
+### Linhas e categorias
+
+- Camisetas Dry Fit (linha Essential)
+- Camisetas Oversized
+- Bermudas e shorts
+- Linha Apex Pro (alta performance)
+- Linha Thermaflow (tecido térmico/poliamida)
+- Regatas
+- Casacos e agasalhos
+- Calças
+- Bonés e acessórios de cabeça
+- Cuecas
+- Meias
+- Garrafas e acessórios de treino
+
+### Coleções especiais
+
+- Coleção Copa 2026
+
+## Condições comerciais
+
+- Frete grátis para compras acima de R$ 199
+- Troca fácil em até 30 dias após o recebimento
+- Cashback de 10% em todas as compras
+- Parcelamento em até 10x sem juros no cartão
+- 10% de desconto adicional pagando via Pix
+
+## Formas de pagamento
+
+- Pix (10% de desconto)
+- Cartão de crédito (até 10x sem juros)
+- Boleto bancário
+- Bandeiras aceitas: Visa, Mastercard, Elo, American Express, Hipercard
+
+## Commerce Protocol (UCP)
+
+- UCP discovery: {{ agents.ucp_discovery_url }}
+- Endpoint MCP: {{ agents.mcp_endpoint_url }}
+
+### Versões UCP suportadas
+{% for version in agents.ucp_versions %}
+- {{ version }}
+{% endfor %}
+
+## Navegação somente leitura
+
+- Todos os produtos: `GET /collections/all`
+- JSON de um produto: `GET /products/{handle}.json`
+- Blog: `GET /blogs/{handle}`
+- Sitemap: {{ agents.sitemap_url }}
+
+Preços e disponibilidade são retornados em {{ agents.currency }}. Sempre confirme preço e estoque via o endpoint JSON do produto antes de responder ao usuário — não assuma valores de páginas em cache.
+
+## Políticas
+
+Políticas de troca, devolução, envio e privacidade estão nas páginas padrão da loja em `/policies/`. Prazo de troca: até 30 dias após o recebimento.
+
+## Dados legais
+
+CNPJ: 27.672.847/0001-79
